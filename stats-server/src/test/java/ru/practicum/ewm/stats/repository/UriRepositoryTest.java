@@ -20,7 +20,7 @@ public class UriRepositoryTest {
         assertEquals(archetype.getPath(), created.getPath());
         assertEquals(
                 created,
-                testee.getById(created.getId())
+                testee.findById(created.getId()).get()
         );
     }
 }

@@ -36,7 +36,7 @@ public class HitRepositoryTest {
         assertEquals(archetype.getTimestamp(), created.getTimestamp());
         assertEquals(
                 created,
-                testee.getById(created.getId())
+                testee.findById(created.getId()).get()
         );
     }
 }

@@ -20,7 +20,7 @@ public class AppRepositoryTest {
         assertEquals(archetype.getName(), created.getName());
         assertEquals(
                 created,
-                testee.getById(created.getId())
+                testee.findById(created.getId()).get()
         );
     }
 }
