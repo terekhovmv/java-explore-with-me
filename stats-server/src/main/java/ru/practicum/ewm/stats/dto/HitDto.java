@@ -8,7 +8,8 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
-public class RegisterHitDto {
+public class HitDto {
+    Long id;
     @NotNull
     String app;
     @NotNull
