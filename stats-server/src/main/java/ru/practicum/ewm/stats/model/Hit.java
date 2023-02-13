@@ -1,7 +1,6 @@
 package ru.practicum.ewm.stats.model;
 
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
@@ -31,7 +30,6 @@ public class Hit {
     @Column(name = "ip")
     String ip;
 
-    @CreatedDate
-    @Column(name = "created")
-    LocalDateTime created;
+    @Column(name = "timestamp")
+    LocalDateTime timestamp;
 }

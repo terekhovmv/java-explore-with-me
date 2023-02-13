@@ -39,7 +39,7 @@ public class StatsServiceImpl implements StatsService {
         createdDto.setApp(created.getApp().getName());
         createdDto.setUri(created.getUri().getPath());
         createdDto.setIp(created.getIp());
-        createdDto.setTimestamp(created.getCreated());
+        createdDto.setTimestamp(created.getTimestamp());
         return createdDto;
     }
 
