@@ -3,6 +3,7 @@ package ru.practicum.ewm.stats;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.ewm.stats.dto.HitDto;
+import ru.practicum.ewm.stats.dto.HitMapper;
 import ru.practicum.ewm.stats.model.App;
 import ru.practicum.ewm.stats.model.Hit;
 import ru.practicum.ewm.stats.model.Uri;
@@ -19,6 +20,8 @@ public class StatsServiceImpl implements StatsService {
     private final UriRepository uriRepository;
     private final HitRepository hitRepository;
 
+    private final HitMapper hitMapper;
+
     @Override
     @Transactional
     public HitDto register(HitDto dto) {
@@ -34,13 +37,7 @@ public class StatsServiceImpl implements StatsService {
         );
 
         Hit created = hitRepository.save(archetype);
-        HitDto createdDto = new HitDto();
-        createdDto.setId(created.getId());
-        createdDto.setApp(created.getApp().getName());
-        createdDto.setUri(created.getUri().getPath());
-        createdDto.setIp(created.getIp());
-        createdDto.setTimestamp(created.getTimestamp());
-        return createdDto;
+        return hitMapper.toDto(created, app, uri);
     }
 
     private App getApp(String name) {
