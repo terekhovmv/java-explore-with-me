@@ -5,7 +5,7 @@ import inet.ipaddr.IPAddressString;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class IpAddressValidator implements ConstraintValidator<IpAddress, String> {
+public class IPAddressValidator implements ConstraintValidator<IPAddress, String> {
 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {

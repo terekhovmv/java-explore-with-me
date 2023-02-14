@@ -9,8 +9,8 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.PARAMETER})
-@Constraint(validatedBy = IpAddressValidator.class)
-public @interface IpAddress {
+@Constraint(validatedBy = IPAddressValidator.class)
+public @interface IPAddress {
 
     String message() default "Invalid IP address";
 
