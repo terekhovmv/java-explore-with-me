@@ -4,17 +4,18 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import ru.practicum.stats.dto.annotations.IPAddress;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Data
 public class HitDto {
     Long id;
-    @NotNull
+    @NotBlank
     String app;
-    @NotNull
+    @NotBlank
     String uri;
-    @NotNull
+    @NotBlank
     @IPAddress
     String ip;
     @NotNull
