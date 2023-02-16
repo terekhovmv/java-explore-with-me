@@ -9,15 +9,15 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class HitSpy implements HandlerInterceptor {
 
-    private final StatsServerClient statsServerClient;
+    private final HitNotifier hitNotifier;
 
-    public HitSpy(StatsServerClient statsServerClient) {
-        this.statsServerClient = statsServerClient;
+    public HitSpy(HitNotifier hitNotifier) {
+        this.hitNotifier = hitNotifier;
     }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        statsServerClient.hit(request.getRequestURI(), request.getRemoteAddr());
+        hitNotifier.notifyAsync(request.getRequestURI(), request.getRemoteAddr());
         return true;
     }
 
