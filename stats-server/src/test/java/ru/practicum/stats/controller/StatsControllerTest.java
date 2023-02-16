@@ -37,10 +37,9 @@ public class StatsControllerTest {
 
     @Test
     void register() throws Exception {
-        final long idx = 123;
         final LocalDateTime timestamp = LocalDateTime.now();
-        final HitDto requestDto = createHitDto(idx, false, timestamp);
-        final HitDto responseDto = createHitDto(idx, true, timestamp);
+        final HitDto requestDto = createHitDto(false, timestamp);
+        final HitDto responseDto = createHitDto(true, timestamp);
 
         when(
                 service.register(requestDto)
@@ -77,7 +76,7 @@ public class StatsControllerTest {
                         .param("start", dateTimeToString(start))
                         .param("end", dateTimeToString(end))
                         .param("uris", uris.toArray(new String[0]))
-                        .param("unique", new Boolean(unique).toString())
+                        .param("unique", Boolean.toString(unique))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -90,7 +89,8 @@ public class StatsControllerTest {
                 .andExpect(jsonPath("$.[1].hits", is(secondSummary.getHits()), Long.class));
     }
 
-    private HitDto createHitDto(long idx, boolean withId, LocalDateTime timestamp) {
+    private HitDto createHitDto(boolean withId, LocalDateTime timestamp) {
+        final long idx = 123;
         HitDto result = new HitDto();
         result.setId(withId ? idx : null);
         result.setApp("app-name" + idx);
