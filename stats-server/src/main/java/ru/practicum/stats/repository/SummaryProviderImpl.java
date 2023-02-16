@@ -24,10 +24,10 @@ public class SummaryProviderImpl implements SummaryProvider {
 
         CriteriaQuery<Tuple> query = builder.createQuery(Tuple.class);
         Root<Hit> hit = query.from(Hit.class);
-        Path hitAppId = hit.get("app").get("id");
-        Path hitUriId = hit.get("uri").get("id");
-        Path hitIp = hit.get("ip");
-        Path hitTimestamp = hit.get("timestamp");
+        Path<Short> hitAppId = hit.get("app").get("id");
+        Path<Long> hitUriId = hit.get("uri").get("id");
+        Path<String> hitIp = hit.get("ip");
+        Path<LocalDateTime> hitTimestamp = hit.get("timestamp");
 
         Expression<Long> resultHits = uniqueIPs
                 ? builder.countDistinct(hitIp)

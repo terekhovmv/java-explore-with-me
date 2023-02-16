@@ -16,7 +16,7 @@ public class HitSpy implements HandlerInterceptor {
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         hitNotifier.notifyAsync(request.getRequestURI(), request.getRemoteAddr());
         return true;
     }

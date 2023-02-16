@@ -57,7 +57,7 @@ public class HitNotifier {
         client
                 .post()
                 .uri("/hit")
-                .body(BodyInserters.fromObject(dto))
+                .body(BodyInserters.fromValue(dto))
                 .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
                 .header("Accept", MediaType.APPLICATION_JSON_VALUE)
                 .retrieve()
