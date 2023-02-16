@@ -9,8 +9,8 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>stats-server-client</artifactId>
-    <name>Statistics Server Client</name>
+    <artifactId>stats-client</artifactId>
+    <name>Statistics Client</name>
 
     <dependencies>
         <dependency>
