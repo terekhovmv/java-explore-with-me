@@ -10,4 +10,10 @@ public interface UriRepository extends JpaRepository<Uri, Long> {
     Optional<Uri> findOneByPath(String path);
 
     List<Uri> findAllByPathIn(List<String> paths);
+
+    default Uri saveIfAbsentByPath(String path) {
+        return findOneByPath(path).orElseGet(
+                () -> save(new Uri(null, path))
+        );
+    }
 }

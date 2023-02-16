@@ -33,8 +33,8 @@ public class StatsServiceImpl implements StatsService {
     @Override
     @Transactional
     public HitDto register(HitDto dto) {
-        App app = getApp(prepareAppName(dto.getApp()));
-        Uri uri = getUri(prepareUriPath(dto.getUri()));
+        App app = appRepository.saveIfAbsentByName(prepareAppName(dto.getApp()));
+        Uri uri = uriRepository.saveIfAbsentByPath(prepareUriPath(dto.getUri()));
 
         Hit archetype = new Hit(
                 null,
@@ -95,22 +95,6 @@ public class StatsServiceImpl implements StatsService {
                         )
                 )
                 .collect(Collectors.toList());
-    }
-
-    private App getApp(String name) {
-        return appRepository
-                .findOneByName(name)
-                .orElseGet(
-                        () -> appRepository.save(new App(null, name))
-                );
-    }
-
-    private Uri getUri(String path) {
-        return uriRepository
-                .findOneByPath(path)
-                .orElseGet(
-                        () -> uriRepository.save(new Uri(null, path))
-                );
     }
 
     private String prepareAppName(String from) {

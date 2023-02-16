@@ -10,4 +10,10 @@ public interface AppRepository extends JpaRepository<App, Short> {
     Optional<App> findOneByName(String name);
 
     List<App> findAllByIdIn(List<Short> ids);
+
+    default App saveIfAbsentByName(String name) {
+        return findOneByName(name).orElseGet(
+                () -> save(new App(null, name))
+        );
+    }
 }
