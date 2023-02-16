@@ -7,7 +7,7 @@
             <env name="STATS_DB_USERNAME" value="stats-db-user"/>
         </envs>
         <module name="stats-server"/>
-        <option name="SPRING_BOOT_MAIN_CLASS" value="ru.practicum.ewm.stats.StatsServer"/>
+        <option name="SPRING_BOOT_MAIN_CLASS" value="ru.practicum.stats.StatsServer"/>
         <method v="2">
             <option name="Make" enabled="true"/>
         </method>

@@ -3,7 +3,7 @@ package ru.practicum.ewm;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import ru.practicum.ewm.stats.client.HitSpy;
+import ru.practicum.stats.client.HitSpy;
 
 
 @Configuration
