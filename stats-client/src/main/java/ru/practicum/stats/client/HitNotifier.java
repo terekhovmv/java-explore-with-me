@@ -2,7 +2,6 @@ package ru.practicum.stats.client;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.json.Jackson2JsonDecoder;
 import org.springframework.http.codec.json.Jackson2JsonEncoder;
@@ -21,30 +20,22 @@ public class HitNotifier {
     private final WebClient client;
     private final String appName;
 
-    public HitNotifier(
-            @Value("${stats-server.url}") String serverUrl,
-            @Value("${stats-server.app-name}") String appName,
-            ObjectMapper mapper
-    ) {
-        ExchangeStrategies strategies = ExchangeStrategies
-                .builder()
+    public HitNotifier(StatsClientConfiguration configuration, ObjectMapper mapper) {
+        ExchangeStrategies strategies = ExchangeStrategies.builder()
                 .codecs(configurer -> {
-                    configurer.defaultCodecs().jackson2JsonEncoder(
-                            new Jackson2JsonEncoder(mapper, MediaType.APPLICATION_JSON)
-                    );
-                    configurer.defaultCodecs().jackson2JsonDecoder(
-                            new Jackson2JsonDecoder(mapper, MediaType.APPLICATION_JSON)
-                    );
+                    configurer.defaultCodecs()
+                            .jackson2JsonEncoder(new Jackson2JsonEncoder(mapper, MediaType.APPLICATION_JSON));
+                    configurer.defaultCodecs()
+                            .jackson2JsonDecoder(new Jackson2JsonDecoder(mapper, MediaType.APPLICATION_JSON));
                 })
                 .build();
 
-        this.client = WebClient
-                .builder()
-                .baseUrl(serverUrl)
+        this.client = WebClient.builder()
+                .baseUrl(configuration.getServerUrl())
                 .exchangeStrategies(strategies)
                 .build();
 
-        this.appName = appName;
+        this.appName = configuration.getAppName();
     }
 
     public void notifyAsync(String uri, String ip) {
@@ -54,8 +45,7 @@ public class HitNotifier {
         dto.setIp(ip);
         dto.setTimestamp(LocalDateTime.now());
 
-        client
-                .post()
+        client.post()
                 .uri("/hit")
                 .body(BodyInserters.fromValue(dto))
                 .header("Content-Type", MediaType.APPLICATION_JSON_VALUE)
