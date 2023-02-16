@@ -68,7 +68,7 @@ public class HitRepositoryTest {
     }
 
     @Test
-    void filtersByTimestamp() {
+    void filtersSummaryDataByTimestamp() {
         addHit(algolApp, addUri, annIp, -101);
         addHit(basicApp, badUri, bobIp, -1);
         addHit(cobolApp, cutUri, camIp, 1);
@@ -92,7 +92,7 @@ public class HitRepositoryTest {
 
 
     @Test
-    void filtersByUriIds() {
+    void filtersSummaryDataByUriIds() {
         addHit(algolApp, addUri, annIp, -101);
         addHit(basicApp, badUri, bobIp, -1);
         addHit(cobolApp, cutUri, camIp, 1);
@@ -114,7 +114,7 @@ public class HitRepositoryTest {
     }
 
     @Test
-    void filtersDuplicatedIps() {
+    void filtersSummaryDataDuplicatedIps() {
         addHit(algolApp, addUri, annIp, -101);
         addHit(basicApp, badUri, bobIp, -1);
         addHit(basicApp, badUri, camIp, -1);
