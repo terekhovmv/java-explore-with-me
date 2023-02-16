@@ -55,7 +55,7 @@ public class SummaryProviderImpl implements SummaryProvider {
 
         query.groupBy(hitAppId, hitUriId);
 
-        query.orderBy(builder.desc(resultHits));
+        query.orderBy(builder.desc(resultHits), builder.desc(hitAppId), builder.desc(hitUriId));
 
         return em.createQuery(query)
                 .getResultStream()
