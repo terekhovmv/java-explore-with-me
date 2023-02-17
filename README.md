@@ -6,7 +6,7 @@
 
 *Depends on:* `stats-client`
 
-Main API of Explore--with-me application.
+Main API of Explore-with-me application.
 
 ### `stats-server`
 
