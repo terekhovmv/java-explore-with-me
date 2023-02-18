@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.practicum.stats.dto.HitDto;
+import ru.practicum.stats.dto.RegisterHitDto;
 import ru.practicum.stats.dto.SummaryDto;
 import ru.practicum.stats.model.App;
 import ru.practicum.stats.model.Hit;
@@ -37,25 +38,17 @@ public class StatsServiceImplTest {
     private StatsServiceImpl testee;
 
     @Test
-    void register() {
+    void registerHit() {
         final String appName = "app-name";
         final String uriPath = "uri-path";
         final String ip = "127.0.0.1";
         final LocalDateTime timestamp = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
 
-        HitDto dto = new HitDto();
+        RegisterHitDto dto = new RegisterHitDto();
         dto.setApp(appName);
         dto.setUri(uriPath);
         dto.setIp(ip);
         dto.setTimestamp(timestamp);
-
-        HitDto expected = new HitDto();
-        expected.setId(789L);
-        expected.setApp(appName);
-        expected.setUri(uriPath);
-        expected.setIp(ip);
-        expected.setTimestamp(timestamp);
-
 
         App app = new App((short) 123, appName);
         Uri uri = new Uri(456L, uriPath);
@@ -67,6 +60,8 @@ public class StatsServiceImplTest {
         when(
                 uriRepository.saveIfAbsentByPath(uriPath)
         ).thenReturn(uri);
+
+        HitDto expected = new HitDto(789L, appName, uriPath, ip, timestamp);
 
         when(
                 hitRepository.save(any())
@@ -81,7 +76,7 @@ public class StatsServiceImplTest {
             return archetype;
         });
 
-        assertEquals(expected, testee.register(dto));
+        assertEquals(expected, testee.registerHit(dto));
     }
 
     @Test

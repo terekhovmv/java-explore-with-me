@@ -3,9 +3,8 @@ package ru.practicum.stats.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.stats.dto.HitDto;
-import ru.practicum.stats.dto.HitMapper;
+import ru.practicum.stats.dto.RegisterHitDto;
 import ru.practicum.stats.dto.SummaryDto;
-import ru.practicum.stats.dto.SummaryMapper;
 import ru.practicum.stats.model.App;
 import ru.practicum.stats.model.Hit;
 import ru.practicum.stats.model.Summary;
@@ -27,12 +26,9 @@ public class StatsServiceImpl implements StatsService {
     private final UriRepository uriRepository;
     private final HitRepository hitRepository;
 
-    private final HitMapper hitMapper;
-    private final SummaryMapper summaryMapper;
-
     @Override
     @Transactional
-    public HitDto register(HitDto dto) {
+    public HitDto registerHit(RegisterHitDto dto) {
         App app = appRepository.saveIfAbsentByName(prepareAppName(dto.getApp()));
         Uri uri = uriRepository.saveIfAbsentByPath(prepareUriPath(dto.getUri()));
 
@@ -45,7 +41,13 @@ public class StatsServiceImpl implements StatsService {
         );
 
         Hit created = hitRepository.save(archetype);
-        return hitMapper.toDto(created, app, uri);
+        return new HitDto(
+                created.getId(),
+                app.getName(),
+                uri.getPath(),
+                created.getIp(),
+                created.getTimestamp()
+        );
     }
 
     @Override
@@ -88,10 +90,10 @@ public class StatsServiceImpl implements StatsService {
         return summaries
                 .stream()
                 .map(item ->
-                        summaryMapper.toDto(
-                                item,
-                                appByIds.get(item.getAppId()),
-                                uriByIds.get(item.getUriId())
+                        new SummaryDto(
+                                appByIds.get(item.getAppId()).getName(),
+                                uriByIds.get(item.getUriId()).getPath(),
+                                item.getHits()
                         )
                 )
                 .collect(Collectors.toList());

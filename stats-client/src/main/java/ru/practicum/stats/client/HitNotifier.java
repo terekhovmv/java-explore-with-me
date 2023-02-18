@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
-import ru.practicum.stats.dto.HitDto;
+import ru.practicum.stats.dto.RegisterHitDto;
 
 import java.time.LocalDateTime;
 
@@ -39,7 +39,7 @@ public class HitNotifier {
     }
 
     public void notifyAsync(String uri, String ip) {
-        HitDto dto = new HitDto();
+        RegisterHitDto dto = new RegisterHitDto();
         dto.setApp(appName);
         dto.setUri(uri);
         dto.setIp(ip);

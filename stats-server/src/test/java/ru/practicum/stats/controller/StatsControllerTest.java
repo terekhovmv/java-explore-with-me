@@ -7,7 +7,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.practicum.stats.dto.DtoFormat;
 import ru.practicum.stats.dto.HitDto;
+import ru.practicum.stats.dto.RegisterHitDto;
 import ru.practicum.stats.dto.SummaryDto;
 import ru.practicum.stats.service.StatsService;
 
@@ -36,17 +38,17 @@ public class StatsControllerTest {
     private ObjectMapper mapper;
 
     @Test
-    void register() throws Exception {
+    void registerHit() throws Exception {
         final LocalDateTime timestamp = LocalDateTime.now();
-        final HitDto requestDto = createHitDto(false, timestamp);
-        final HitDto responseDto = createHitDto(true, timestamp);
+        final HitDto responseDto = createHitDto(timestamp);
+        final RegisterHitDto dto = createRegisterHitDto(responseDto);
 
         when(
-                service.register(requestDto)
+                service.registerHit(dto)
         ).thenReturn(responseDto);
 
         mvc.perform(post("/hit")
-                        .content(mapper.writeValueAsString(requestDto))
+                        .content(mapper.writeValueAsString(dto))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
@@ -89,26 +91,35 @@ public class StatsControllerTest {
                 .andExpect(jsonPath("$.[1].hits", is(secondSummary.getHits()), Long.class));
     }
 
-    private HitDto createHitDto(boolean withId, LocalDateTime timestamp) {
-        final long idx = 123;
-        HitDto result = new HitDto();
-        result.setId(withId ? idx : null);
-        result.setApp("app-name" + idx);
-        result.setUri("uri-path-" + idx);
-        result.setIp("127.0.0." + idx % 128);
-        result.setTimestamp(timestamp.truncatedTo(ChronoUnit.SECONDS));
+    private RegisterHitDto createRegisterHitDto(HitDto produced) {
+        RegisterHitDto result = new RegisterHitDto();
+        result.setApp(produced.getApp());
+        result.setUri(produced.getUri());
+        result.setIp(produced.getIp());
+        result.setTimestamp(produced.getTimestamp());
         return result;
+    }
+
+    private HitDto createHitDto(LocalDateTime timestamp) {
+        final long idx = 123;
+        return new HitDto(
+                idx,
+                "app-name" + idx,
+                "uri-path-" + idx,
+                "127.0.0." + idx % 128,
+                timestamp.truncatedTo(ChronoUnit.SECONDS)
+        );
     }
 
     private SummaryDto createSummaryDto(int idx, long hits) {
-        SummaryDto result = new SummaryDto();
-        result.setApp("app-name" + idx);
-        result.setUri("uri-path-" + idx);
-        result.setHits(hits);
-        return result;
+        return new SummaryDto(
+                "app-name" + idx,
+                "uri-path-" + idx,
+                hits
+        );
     }
 
     private String dateTimeToString(LocalDateTime from) {
-        return DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(from);
+        return DateTimeFormatter.ofPattern(DtoFormat.DATE_TIME_FORMAT).format(from);
     }
 }

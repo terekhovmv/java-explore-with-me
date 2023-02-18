@@ -5,7 +5,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.stats.dto.DtoFormat;
 import ru.practicum.stats.dto.HitDto;
+import ru.practicum.stats.dto.RegisterHitDto;
 import ru.practicum.stats.dto.SummaryDto;
 import ru.practicum.stats.service.StatsService;
 
@@ -21,15 +23,15 @@ public class StatsController {
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
-    HitDto register(@RequestBody @Valid HitDto dto) {
-        return service.register(dto);
+    HitDto registerHit(@RequestBody @Valid RegisterHitDto dto) {
+        return service.registerHit(dto);
     }
 
     @GetMapping("/stats")
     @ResponseStatus(HttpStatus.OK)
     List<SummaryDto> getStats(
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
+            @RequestParam @DateTimeFormat(pattern = DtoFormat.DATE_TIME_FORMAT) LocalDateTime start,
+            @RequestParam @DateTimeFormat(pattern = DtoFormat.DATE_TIME_FORMAT) LocalDateTime end,
             @RequestParam List<String> uris,
             @RequestParam(required = false, defaultValue = "false") boolean unique
     ) {
