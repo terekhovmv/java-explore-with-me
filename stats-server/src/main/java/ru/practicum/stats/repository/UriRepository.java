@@ -1,5 +1,6 @@
 package ru.practicum.stats.repository;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import ru.practicum.stats.model.Uri;
 
@@ -13,7 +14,13 @@ public interface UriRepository extends JpaRepository<Uri, Long> {
 
     default Uri saveIfAbsentByPath(String path) {
         return findOneByPath(path).orElseGet(
-                () -> save(new Uri(null, path))
+                () -> {
+                    try {
+                        return save(new Uri(null, path));
+                    } catch (DataIntegrityViolationException exception) {
+                        return findOneByPath(path).orElseThrow(() -> exception);
+                    }
+                }
         );
     }
 }

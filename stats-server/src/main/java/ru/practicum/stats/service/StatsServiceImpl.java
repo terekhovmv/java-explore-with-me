@@ -13,7 +13,6 @@ import ru.practicum.stats.repository.AppRepository;
 import ru.practicum.stats.repository.HitRepository;
 import ru.practicum.stats.repository.UriRepository;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +26,6 @@ public class StatsServiceImpl implements StatsService {
     private final HitRepository hitRepository;
 
     @Override
-    @Transactional
     public HitDto registerHit(RegisterHitDto dto) {
         App app = appRepository.saveIfAbsentByName(prepareAppName(dto.getApp()));
         Uri uri = uriRepository.saveIfAbsentByPath(prepareUriPath(dto.getUri()));
