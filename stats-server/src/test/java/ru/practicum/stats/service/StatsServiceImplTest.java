@@ -72,8 +72,13 @@ public class StatsServiceImplTest {
             assertEquals(ip, archetype.getIp());
             assertEquals(timestamp, archetype.getTimestamp());
 
-            archetype.setId(expected.getId());
-            return archetype;
+            return new Hit(
+                    expected.getId(),
+                    archetype.getApp(),
+                    archetype.getUri(),
+                    archetype.getIp(),
+                    archetype.getTimestamp()
+            );
         });
 
         assertEquals(expected, testee.registerHit(dto));
