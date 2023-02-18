@@ -2,6 +2,9 @@
     <configuration default="false" name="EwmServer" type="SpringBootApplicationConfigurationType"
                    factoryName="Spring Boot">
         <envs>
+            <env name="EWM_DB_PASSWORD" value="ewm-db-pwd"/>
+            <env name="EWM_DB_URL" value="jdbc:postgresql://localhost:5432/ewm-db"/>
+            <env name="EWM_DB_USERNAME" value="ewm-db-user"/>
             <env name="STATS_SERVER_URL" value="http://localhost:9090"/>
         </envs>
         <module name="ewm-server"/>
