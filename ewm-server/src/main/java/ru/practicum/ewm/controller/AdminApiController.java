@@ -64,4 +64,13 @@ public class AdminApiController implements AdminApi {
                 HttpStatus.OK
         );
     }
+
+    /*
+    TODO:
+    ResponseEntity<List<EventFullDto>> getEvents2(List<Long> users, List<String> states, List<Long> categories, String rangeStart, String rangeEnd, Integer from, Integer size);
+    ResponseEntity<EventFullDto> updateEvent1(Long eventId, UpdateEventAdminRequest body);
+    ResponseEntity<CompilationDto> saveCompilation(NewCompilationDto body);
+    ResponseEntity<CompilationDto> updateCompilation(Long compId, UpdateCompilationRequest body);
+    ResponseEntity<Void> deleteCompilation(Long compId);
+    */
 }
