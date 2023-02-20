@@ -15,8 +15,8 @@ import ru.practicum.ewm.exceptions.NotFoundException;
 import javax.validation.ValidationException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice
@@ -55,15 +55,26 @@ public class ErrorHandler {
             Throwable throwable,
             ErrorStatus info
     ) {
-        //org.apache.commons.
         return new ResponseEntity<>(
                 new ApiError()
                         .status(info.getApiStatus())
                         .reason(info.getReason())
                         .message(throwable.getMessage())
-                        .errors(List.of(throwable.getStackTrace()).stream().map(Object::toString).collect(Collectors.toList()))
+                        .errors(getThrowableErrors(throwable))
                         .timestamp(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.now())),
                 info.getHttpStatus()
         );
+    }
+
+    private List<String> getThrowableErrors(Throwable throwable) {
+        final int LIMIT = 10;
+
+        List<String> result = new ArrayList<>();
+        Throwable current = throwable;
+        while (current != null && result.size() < LIMIT) {
+            result.add(current.toString());
+            current = current.getCause();
+        }
+        return result;
     }
 }
