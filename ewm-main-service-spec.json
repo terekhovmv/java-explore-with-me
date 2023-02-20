@@ -752,7 +752,7 @@
     },
     "/admin/users/{userId}": {
       "delete": {
-        "operationId": "delete",
+        "operationId": "deleteUser",
         "parameters": [
           {
             "description": "id пользователя",
