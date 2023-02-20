@@ -16,7 +16,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-public class AdminController implements AdminApi {
+public class AdminApiController implements AdminApi {
     private final CategoryService categoryService;
 
     private final UserService userService;

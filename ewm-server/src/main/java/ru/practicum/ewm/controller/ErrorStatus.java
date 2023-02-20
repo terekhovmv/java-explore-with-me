@@ -1,4 +1,4 @@
-package ru.practicum.ewm.errors;
+package ru.practicum.ewm.controller;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

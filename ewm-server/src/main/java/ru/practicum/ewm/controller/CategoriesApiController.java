@@ -12,7 +12,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-public class CategoryController implements CategoriesApi {
+public class CategoriesApiController implements CategoriesApi {
     private final CategoryService service;
 
     @Override
