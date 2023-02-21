@@ -24,12 +24,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto add(NewUserRequest dto) {
-        User archetype = new User(
-                null,
-                dto.getName(),
-                dto.getEmail()
+        User created = repository.save(
+                mapper.transientFromDto(dto)
         );
-        User created = repository.save(archetype);
         log.info("User '{}' was successfully added with id {}", created.getName(), created.getId());
         return mapper.toDto(created);
     }

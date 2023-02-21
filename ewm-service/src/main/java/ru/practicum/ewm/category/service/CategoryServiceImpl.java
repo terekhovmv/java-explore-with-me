@@ -2,7 +2,6 @@ package ru.practicum.ewm.category.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.ewm.api.model.CategoryDto;
@@ -25,8 +24,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto add(NewCategoryDto dto) {
-        Category archetype = new Category(null, dto.getName());
-        Category created = repository.save(archetype);
+        Category created = repository.save(
+                mapper.transientFromDto(dto)
+        );
         log.info("Category '{}' was successfully added with id {}", created.getName(), created.getId());
         return mapper.toDto(created);
     }
@@ -41,9 +41,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto update(long id, CategoryDto dto) {
         Category toUpdate = repository.require(id);
-        if (StringUtils.isNotBlank(dto.getName())) {
-            toUpdate.setName(dto.getName());
-        }
+        mapper.updateFromDto(toUpdate, dto);
+
         Category updated = repository.save(toUpdate);
         log.info("Category #'{}' was successfully updated", id);
         return mapper.toDto(updated);

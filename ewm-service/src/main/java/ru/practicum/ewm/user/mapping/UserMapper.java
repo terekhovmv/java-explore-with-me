@@ -1,6 +1,7 @@
 package ru.practicum.ewm.user.mapping;
 
 import org.springframework.stereotype.Component;
+import ru.practicum.ewm.api.model.NewUserRequest;
 import ru.practicum.ewm.api.model.UserDto;
 import ru.practicum.ewm.user.model.User;
 
@@ -11,6 +12,14 @@ public final class UserMapper {
                 .id(from.getId())
                 .name(from.getName())
                 .email(from.getEmail());
+    }
+
+    public User transientFromDto(NewUserRequest from) {
+        return new User(
+                null,
+                from.getName(),
+                from.getEmail()
+        );
     }
 }
 
