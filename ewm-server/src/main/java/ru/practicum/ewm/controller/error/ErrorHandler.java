@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import ru.practicum.ewm.api.model.ApiError;
 import ru.practicum.ewm.exception.NotFoundException;
 
@@ -38,7 +39,8 @@ public class ErrorHandler {
 
     @ExceptionHandler({
             ValidationException.class,
-            MethodArgumentNotValidException.class
+            MethodArgumentNotValidException.class,
+            MethodArgumentTypeMismatchException.class
     })
     public ResponseEntity<ApiError> handleValidationException(Throwable throwable) {
         return createResponseEntity(throwable, ErrorStatus.BAD_REQUEST);
