@@ -31,7 +31,7 @@ public class HitNotifier {
                 .build();
 
         this.client = WebClient.builder()
-                .baseUrl(configuration.getServerUrl())
+                .baseUrl(configuration.getServiceUrl())
                 .exchangeStrategies(strategies)
                 .build();
 

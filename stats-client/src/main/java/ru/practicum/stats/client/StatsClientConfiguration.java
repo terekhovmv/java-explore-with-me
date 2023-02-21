@@ -10,6 +10,6 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 @Setter
 public class StatsClientConfiguration {
-    String serverUrl;
+    String serviceUrl;
     String appName;
 }

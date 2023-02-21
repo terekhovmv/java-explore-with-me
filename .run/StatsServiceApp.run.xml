@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="StatsServiceApp" type="SpringBootApplicationConfigurationType"
+                   factoryName="Spring Boot">
+        <envs>
+            <env name="STATS_DB_PASSWORD" value="stats-db-pwd"/>
+            <env name="STATS_DB_URL" value="jdbc:postgresql://localhost:5432/stats-db"/>
+            <env name="STATS_DB_USERNAME" value="stats-db-user"/>
+        </envs>
+        <module name="stats-service"/>
+        <option name="SPRING_BOOT_MAIN_CLASS" value="ru.practicum.stats.StatsServiceApp"/>
+        <method v="2">
+            <option name="Make" enabled="true"/>
+        </method>
+    </configuration>
+</component>

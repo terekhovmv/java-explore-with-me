@@ -12,11 +12,11 @@
 
     <name>Explore-with-me Project</name>
     <modules>
-        <module>ewm-server</module>
-        <module>ewm-server-contract</module>
+        <module>ewm-service</module>
+        <module>ewm-service-contract</module>
         <module>stats-client</module>
         <module>stats-dto</module>
-        <module>stats-server</module>
+        <module>stats-service</module>
     </modules>
 
     <groupId>ru.practicum</groupId>
