@@ -693,7 +693,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewUserRequest"
+                "$ref": "#/components/schemas/NewUserDto"
               }
             }
           },
@@ -2551,7 +2551,7 @@
         },
         "description": "Новое событие"
       },
-      "NewUserRequest": {
+      "NewUserDto": {
         "required": [
           "email",
           "name"
@@ -2560,6 +2560,7 @@
         "properties": {
           "email": {
             "type": "string",
+            "format": "email",
             "description": "Почтовый адрес",
             "example": "ivan.petrov@practicummail.ru"
           },

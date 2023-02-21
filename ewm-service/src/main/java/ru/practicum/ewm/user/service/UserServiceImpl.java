@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import ru.practicum.ewm.api.model.NewUserRequest;
+import ru.practicum.ewm.api.model.NewUserDto;
 import ru.practicum.ewm.api.model.UserDto;
 import ru.practicum.ewm.pagination.RandomAccessPageRequest;
 import ru.practicum.ewm.user.mapping.UserMapper;
@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper mapper;
 
     @Override
-    public UserDto add(NewUserRequest dto) {
+    public UserDto add(NewUserDto dto) {
         User created = repository.save(
                 mapper.transientFromDto(dto)
         );

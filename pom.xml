@@ -32,6 +32,7 @@
         <revision>1.0.0-SNAPSHOT</revision>
 
         <commons-lang3.version>3.12.0</commons-lang3.version>
+        <commons-validator.version>1.7</commons-validator.version>
         <ipaddress.version>5.4.0</ipaddress.version>
         <swagger-models.version>2.2.8</swagger-models.version>
         <swagger-annotations.version>2.2.8</swagger-annotations.version>
@@ -44,6 +45,12 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${commons-lang3.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-validator</groupId>
+                <artifactId>commons-validator</artifactId>
+                <version>${commons-validator.version}</version>
             </dependency>
 
             <dependency>

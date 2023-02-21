@@ -7,7 +7,9 @@ import org.springframework.stereotype.Controller;
 import ru.practicum.ewm.api.AdminApi;
 import ru.practicum.ewm.api.model.*;
 import ru.practicum.ewm.category.service.CategoryService;
+import ru.practicum.ewm.category.validation.NewCategoryDtoValidator;
 import ru.practicum.ewm.user.service.UserService;
+import ru.practicum.ewm.user.validation.NewUserDtoValidator;
 
 import java.util.List;
 
@@ -18,8 +20,14 @@ public class AdminApiController implements AdminApi {
 
     private final UserService userService;
 
+    private final NewCategoryDtoValidator newCategoryDtoValidator;
+
+    private final NewUserDtoValidator newUserDtoValidator;
+
     @Override
     public ResponseEntity<CategoryDto> addCategory(NewCategoryDto body) {
+        newCategoryDtoValidator.requireValid(body);
+
         return new ResponseEntity<>(
                 categoryService.add(body),
                 HttpStatus.CREATED
@@ -41,7 +49,9 @@ public class AdminApiController implements AdminApi {
     }
 
     @Override
-    public ResponseEntity<UserDto> registerUser(NewUserRequest body) {
+    public ResponseEntity<UserDto> registerUser(NewUserDto body) {
+        newUserDtoValidator.requireValid(body);
+
         return new ResponseEntity<>(
                 userService.add(body),
                 HttpStatus.CREATED
