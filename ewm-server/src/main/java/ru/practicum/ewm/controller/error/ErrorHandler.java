@@ -44,6 +44,13 @@ public class ErrorHandler {
         return createResponseEntity(throwable, ErrorStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler({
+            UnsupportedOperationException.class,
+    })
+    public ResponseEntity<ApiError> handleNotImplemented(Throwable throwable) {
+        return createResponseEntity(throwable, ErrorStatus.NOT_IMPLEMENTED);
+    }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ApiError> handleOtherwise(Throwable throwable) {

@@ -23,6 +23,11 @@ enum ErrorStatus {
             ApiError.StatusEnum._400_BAD_REQUEST,
             "The request is malformed"
     ),
+    NOT_IMPLEMENTED(
+            HttpStatus.NOT_IMPLEMENTED,
+            ApiError.StatusEnum._501_NOT_IMPLEMENTED,
+            "Not Implemented"
+    ),
     INTERNAL_SERVER_ERROR(
             HttpStatus.INTERNAL_SERVER_ERROR,
             ApiError.StatusEnum._500_INTERNAL_SERVER_ERROR,
