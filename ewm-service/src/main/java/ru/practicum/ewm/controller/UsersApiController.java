@@ -8,6 +8,7 @@ import ru.practicum.ewm.api.UsersApi;
 import ru.practicum.ewm.api.dto.*;
 import ru.practicum.ewm.api.dto.validation.NewEventDtoValidator;
 import ru.practicum.ewm.event.service.EventService;
+import ru.practicum.ewm.request.service.RequestService;
 
 import java.util.List;
 
@@ -16,6 +17,8 @@ import java.util.List;
 public class UsersApiController implements UsersApi {
 
     private final EventService eventService;
+
+    private final RequestService requestService;
 
     private final NewEventDtoValidator newEventDtoValidator;
 
@@ -49,8 +52,10 @@ public class UsersApiController implements UsersApi {
 
     @Override
     public ResponseEntity<ParticipationRequestDto> addParticipationRequest(Long userId, Long eventId) {
-        //TODO
-        throw new UnsupportedOperationException();
+        return new ResponseEntity<>(
+                requestService.add(userId, eventId),
+                HttpStatus.CREATED
+        );
     }
 
     @Override
