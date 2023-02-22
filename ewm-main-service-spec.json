@@ -553,7 +553,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateEventAdminRequest"
+                "$ref": "#/components/schemas/UpdateEventAdminDto"
               }
             }
           },
@@ -2632,7 +2632,7 @@
         },
         "description": "Изменение информации о подборке событий. Если поле в запросе не указано (равно null) - значит изменение этих данных не треубется."
       },
-      "UpdateEventAdminRequest": {
+      "UpdateEventAdminDto": {
         "type": "object",
         "properties": {
           "annotation": {
