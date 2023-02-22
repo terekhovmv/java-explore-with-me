@@ -16,12 +16,24 @@ public class BaseDtoValidator {
         throw new ValidationException("Unsupported blank value of provided " + path);
     }
 
+    protected void requireNotBlankOrNull(String path, String value) {
+        if (value != null) {
+            requireNotBlank(path, value);
+        }
+    }
+
     protected void requireSize(String path, String value, Integer min, Integer max) {
         if (hasSize(value, min, max)) {
             return;
         }
 
         throw new ValidationException("Unsupported size of provided " + path);
+    }
+
+    protected void requireSizeOrNull(String path, String value, Integer min, Integer max) {
+        if (value != null) {
+            requireSize(path, value, min, max);
+        }
     }
 
     protected void requireDateTime(String path, String value) {
@@ -32,12 +44,24 @@ public class BaseDtoValidator {
         throw new ValidationException("Incorrect date/time format of provided " + path);
     }
 
+    protected void requireDateTimeOrNull(String path, String value) {
+        if (value != null) {
+            requireDateTime(path, value);
+        }
+    }
+
     protected void requireEmail(String path, String value) {
         if (isEmail(value)) {
             return;
         }
 
         throw new ValidationException("Incorrect e-mail format of provided " + path);
+    }
+
+    protected void requireEmailOrNull(String path, String value) {
+        if (value != null) {
+            requireEmail(path, value);
+        }
     }
 
     protected boolean isNotBlank(String value) {

@@ -22,7 +22,7 @@ public final class CategoryMapper {
     }
 
     public void updateFromDto(Category toUpdate, CategoryDto from) {
-        if (StringUtils.isNotBlank(from.getName())) {
+        if (from.getName() != null) {
             toUpdate.setName(from.getName());
         }
     }

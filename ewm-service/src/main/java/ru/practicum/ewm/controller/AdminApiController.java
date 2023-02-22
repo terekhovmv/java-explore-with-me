@@ -8,6 +8,7 @@ import ru.practicum.ewm.api.AdminApi;
 import ru.practicum.ewm.api.dto.*;
 import ru.practicum.ewm.api.dto.validation.NewCategoryDtoValidator;
 import ru.practicum.ewm.api.dto.validation.NewUserDtoValidator;
+import ru.practicum.ewm.api.dto.validation.UpdateCategoryDtoValidator;
 import ru.practicum.ewm.category.service.CategoryService;
 import ru.practicum.ewm.user.service.UserService;
 
@@ -21,6 +22,8 @@ public class AdminApiController implements AdminApi {
     private final UserService userService;
 
     private final NewCategoryDtoValidator newCategoryDtoValidator;
+
+    private final UpdateCategoryDtoValidator updateCategoryDtoValidator;
 
     private final NewUserDtoValidator newUserDtoValidator;
 
@@ -42,6 +45,8 @@ public class AdminApiController implements AdminApi {
 
     @Override
     public ResponseEntity<CategoryDto> updateCategory(Long catId, CategoryDto body) {
+        updateCategoryDtoValidator.requireValid(body);
+
         return new ResponseEntity<>(
                 categoryService.update(catId, body),
                 HttpStatus.OK
