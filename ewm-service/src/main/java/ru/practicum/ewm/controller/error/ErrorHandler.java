@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import ru.practicum.ewm.api.dto.ApiError;
 import ru.practicum.ewm.exception.ConflictException;
+import ru.practicum.ewm.exception.ForbiddenException;
 import ru.practicum.ewm.exception.NotFoundException;
 
 import javax.validation.ValidationException;
@@ -46,6 +47,13 @@ public class ErrorHandler {
     })
     public ResponseEntity<ApiError> handleValidationException(Throwable throwable) {
         return createResponseEntity(throwable, ErrorStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({
+            ForbiddenException.class,
+    })
+    public ResponseEntity<ApiError> handleForbidden(Throwable throwable) {
+        return createResponseEntity(throwable, ErrorStatus.FORBIDDEN);
     }
 
     @ExceptionHandler({

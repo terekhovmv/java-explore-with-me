@@ -23,6 +23,11 @@ enum ErrorStatus {
             ApiError.StatusEnum._400_BAD_REQUEST,
             "The request is malformed"
     ),
+    FORBIDDEN(
+            HttpStatus.FORBIDDEN,
+            ApiError.StatusEnum._403_FORBIDDEN,
+            "For the requested operation the conditions are not met"
+    ),
     NOT_IMPLEMENTED(
             HttpStatus.NOT_IMPLEMENTED,
             ApiError.StatusEnum._501_NOT_IMPLEMENTED,
