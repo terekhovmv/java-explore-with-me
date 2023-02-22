@@ -1,6 +1,5 @@
 package ru.practicum.ewm.category.mapping;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import ru.practicum.ewm.api.dto.CategoryDto;
 import ru.practicum.ewm.api.dto.NewCategoryDto;
