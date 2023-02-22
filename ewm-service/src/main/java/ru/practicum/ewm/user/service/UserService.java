@@ -1,7 +1,7 @@
 package ru.practicum.ewm.user.service;
 
-import ru.practicum.ewm.api.model.NewUserDto;
-import ru.practicum.ewm.api.model.UserDto;
+import ru.practicum.ewm.api.dto.NewUserDto;
+import ru.practicum.ewm.api.dto.UserDto;
 
 import java.util.List;
 

@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import ru.practicum.ewm.api.CategoriesApi;
-import ru.practicum.ewm.api.model.CategoryDto;
+import ru.practicum.ewm.api.dto.CategoryDto;
 import ru.practicum.ewm.category.service.CategoryService;
 
 import java.util.List;

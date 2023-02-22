@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import ru.practicum.ewm.api.EventsApi;
-import ru.practicum.ewm.api.model.EventFullDto;
-import ru.practicum.ewm.api.model.EventShortDto;
+import ru.practicum.ewm.api.dto.EventFullDto;
+import ru.practicum.ewm.api.dto.EventShortDto;
 
 import java.util.List;
 

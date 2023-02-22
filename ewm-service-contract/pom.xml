@@ -14,7 +14,7 @@
 
     <properties>
         <apiPackage>${project.groupId}.ewm.api</apiPackage>
-        <modelPackage>${apiPackage}.model</modelPackage>
+        <modelPackage>${apiPackage}.dto</modelPackage>
     </properties>
 
     <dependencies>

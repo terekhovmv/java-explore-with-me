@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import ru.practicum.ewm.api.model.ApiError;
+import ru.practicum.ewm.api.dto.ApiError;
 import ru.practicum.ewm.exception.NotFoundException;
 
 import javax.validation.ValidationException;

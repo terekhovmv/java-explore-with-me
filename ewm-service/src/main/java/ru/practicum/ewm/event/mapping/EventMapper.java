@@ -2,10 +2,10 @@ package ru.practicum.ewm.event.mapping;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.practicum.ewm.api.model.EventFullDto;
-import ru.practicum.ewm.api.model.EventShortDto;
-import ru.practicum.ewm.api.model.Location;
-import ru.practicum.ewm.api.model.NewEventDto;
+import ru.practicum.ewm.api.dto.EventFullDto;
+import ru.practicum.ewm.api.dto.EventShortDto;
+import ru.practicum.ewm.api.dto.Location;
+import ru.practicum.ewm.api.dto.NewEventDto;
 import ru.practicum.ewm.category.mapping.CategoryMapper;
 import ru.practicum.ewm.category.model.Category;
 import ru.practicum.ewm.event.model.Event;

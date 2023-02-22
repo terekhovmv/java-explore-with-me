@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import ru.practicum.ewm.api.CompilationsApi;
-import ru.practicum.ewm.api.model.CompilationDto;
+import ru.practicum.ewm.api.dto.CompilationDto;
 
 import java.util.List;
 

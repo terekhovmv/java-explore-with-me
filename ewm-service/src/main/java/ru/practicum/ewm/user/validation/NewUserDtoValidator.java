@@ -3,7 +3,7 @@ package ru.practicum.ewm.user.validation;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.stereotype.Component;
-import ru.practicum.ewm.api.model.NewUserDto;
+import ru.practicum.ewm.api.dto.NewUserDto;
 
 import javax.validation.ValidationException;
 

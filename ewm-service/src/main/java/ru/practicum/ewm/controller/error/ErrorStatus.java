@@ -3,7 +3,7 @@ package ru.practicum.ewm.controller.error;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import ru.practicum.ewm.api.model.ApiError;
+import ru.practicum.ewm.api.dto.ApiError;
 
 @Getter
 @RequiredArgsConstructor
