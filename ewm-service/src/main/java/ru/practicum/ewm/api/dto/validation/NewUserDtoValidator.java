@@ -1,4 +1,4 @@
-package ru.practicum.ewm.user.validation;
+package ru.practicum.ewm.api.dto.validation;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;

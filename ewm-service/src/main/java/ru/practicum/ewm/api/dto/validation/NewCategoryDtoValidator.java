@@ -1,4 +1,4 @@
-package ru.practicum.ewm.category.validation;
+package ru.practicum.ewm.api.dto.validation;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
