@@ -13,9 +13,6 @@ import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.user.mapping.UserMapper;
 import ru.practicum.ewm.user.model.User;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 @Component
 @RequiredArgsConstructor
 public class EventMapper {
@@ -46,9 +43,9 @@ public class EventMapper {
                 .requestModeration(from.getRequestModeration())
                 .participantLimit(from.getParticipantLimit())
                 .state(eventStateMapper.toDtoState(from.getState()))
+                .confirmedRequests(from.getConfirmedRequests())
                 .createdOn(dateTimeMapper.dateTimeToString(from.getCreatedOn()))
                 .publishedOn(dateTimeMapper.dateTimeToString(from.getPublishedOn()))
-                .confirmedRequests(from.getConfirmedRequests())
                 .views(views);
     }
 
@@ -80,9 +77,9 @@ public class EventMapper {
                 .requestModeration(from.isRequestModeration())
                 .participantLimit(from.getParticipantLimit())
                 .state(eventStateMapper.toState(EventFullDto.StateEnum.PENDING))
+                .confirmedRequests(0L)
                 .createdOn(null)
                 .publishedOn(null)
-                .confirmedRequests(null)
                 .build();
     }
 }

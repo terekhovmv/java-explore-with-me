@@ -32,9 +32,9 @@ CREATE TABLE IF NOT EXISTS events
     request_moderation BOOLEAN                                 NOT NULL,
     participant_limit  INTEGER                                 NOT NULL,
     state              VARCHAR(64)                             NOT NULL,
-    created_on         TIMESTAMP WITHOUT TIME ZONE DEFAULT current_timestamp,
+    confirmed_requests BIGINT                                  NOT NULL,
+    created_on         TIMESTAMP WITHOUT TIME ZONE             NOT NULL,
     published_on       TIMESTAMP WITHOUT TIME ZONE,
-    confirmed_requests BIGINT                      DEFAULT 0,
 
     CONSTRAINT pk_event PRIMARY KEY (id),
     CONSTRAINT fk_event_category FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE CASCADE,

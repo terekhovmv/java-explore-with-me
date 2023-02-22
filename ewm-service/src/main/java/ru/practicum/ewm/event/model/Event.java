@@ -64,13 +64,13 @@ public class Event {
     @Enumerated(EnumType.STRING)
     EventState state;
 
+    @Column(name = "confirmed_requests")
+    Long confirmedRequests;
+
     @CreatedDate
     @Column(name = "created_on")
     LocalDateTime createdOn;
 
     @Column(name = "published_on")
     LocalDateTime publishedOn;
-
-    @Column(name = "confirmed_requests")
-    Long confirmedRequests;
 }
