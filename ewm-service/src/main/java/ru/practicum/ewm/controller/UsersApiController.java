@@ -1,10 +1,12 @@
 package ru.practicum.ewm.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import ru.practicum.ewm.api.UsersApi;
 import ru.practicum.ewm.api.model.*;
+import ru.practicum.ewm.event.service.EventService;
 
 import java.util.List;
 
@@ -12,10 +14,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UsersApiController implements UsersApi {
 
+    private final EventService eventService;
+
     @Override
     public ResponseEntity<EventFullDto> addEvent(Long userId, NewEventDto body) {
-        //TODO
-        throw new UnsupportedOperationException();
+        //TODO validate body
+        return new ResponseEntity<>(
+                eventService.add(userId, body),
+                HttpStatus.CREATED
+        );
     }
 
     @Override
