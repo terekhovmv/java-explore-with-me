@@ -9,7 +9,9 @@ import ru.practicum.ewm.api.dto.*;
 import ru.practicum.ewm.api.dto.validation.NewCategoryDtoValidator;
 import ru.practicum.ewm.api.dto.validation.NewUserDtoValidator;
 import ru.practicum.ewm.api.dto.validation.UpdateCategoryDtoValidator;
+import ru.practicum.ewm.api.dto.validation.UpdateEventAdminDtoValidator;
 import ru.practicum.ewm.category.service.CategoryService;
+import ru.practicum.ewm.event.service.EventService;
 import ru.practicum.ewm.user.service.UserService;
 
 import java.util.List;
@@ -21,11 +23,15 @@ public class AdminApiController implements AdminApi {
 
     private final UserService userService;
 
+    private final EventService eventService;
+
     private final NewCategoryDtoValidator newCategoryDtoValidator;
 
     private final UpdateCategoryDtoValidator updateCategoryDtoValidator;
 
     private final NewUserDtoValidator newUserDtoValidator;
+
+    private final UpdateEventAdminDtoValidator updateEventAdminDtoValidator;
 
     @Override
     public ResponseEntity<CategoryDto> addCategory(NewCategoryDto body) {
@@ -84,9 +90,13 @@ public class AdminApiController implements AdminApi {
     }
 
     @Override
-    public ResponseEntity<EventFullDto> updateEvent1(Long eventId, UpdateEventAdminRequest body) {
-        //TODO
-        throw new UnsupportedOperationException();
+    public ResponseEntity<EventFullDto> updateEvent1(Long eventId, UpdateEventAdminDto body) {
+        updateEventAdminDtoValidator.requireValid(body);
+
+        return new ResponseEntity<>(
+                eventService.adminUpdate(eventId, body),
+                HttpStatus.OK
+        );
     }
 
     @Override
