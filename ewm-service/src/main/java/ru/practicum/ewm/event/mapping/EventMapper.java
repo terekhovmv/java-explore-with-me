@@ -6,6 +6,7 @@ import ru.practicum.ewm.api.dto.EventFullDto;
 import ru.practicum.ewm.api.dto.EventShortDto;
 import ru.practicum.ewm.api.dto.Location;
 import ru.practicum.ewm.api.dto.NewEventDto;
+import ru.practicum.ewm.api.dto.mapping.DateTimeMapper;
 import ru.practicum.ewm.category.mapping.CategoryMapper;
 import ru.practicum.ewm.category.model.Category;
 import ru.practicum.ewm.event.model.Event;
@@ -25,24 +26,7 @@ public class EventMapper {
 
     private final EventStateMapper eventStateMapper;
 
-    private static String dateTimeToString(LocalDateTime from) {
-        if (from == null) {
-            return null;
-        }
-
-        return DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(from);
-    }
-
-    private static LocalDateTime stringToDateTime(String from) {
-        if (from == null) {
-            return null;
-        }
-
-        return LocalDateTime.parse(
-                from,
-                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-        );
-    }
+    private final DateTimeMapper dateTimeMapper;
 
     public EventFullDto toDto(Event from, long views) {
         return new EventFullDto()
@@ -52,7 +36,7 @@ public class EventMapper {
                 .title(from.getTitle())
                 .annotation(from.getAnnotation())
                 .description(from.getDescription())
-                .eventDate(dateTimeToString(from.getEventDate()))
+                .eventDate(dateTimeMapper.dateTimeToString(from.getEventDate()))
                 .location(
                         new Location()
                                 .lat(from.getLocationLat())
@@ -62,8 +46,8 @@ public class EventMapper {
                 .requestModeration(from.getRequestModeration())
                 .participantLimit(from.getParticipantLimit())
                 .state(eventStateMapper.toDtoState(from.getState()))
-                .createdOn(dateTimeToString(from.getCreatedOn()))
-                .publishedOn(dateTimeToString(from.getPublishedOn()))
+                .createdOn(dateTimeMapper.dateTimeToString(from.getCreatedOn()))
+                .publishedOn(dateTimeMapper.dateTimeToString(from.getPublishedOn()))
                 .confirmedRequests(from.getConfirmedRequests())
                 .views(views);
     }
@@ -75,7 +59,7 @@ public class EventMapper {
                 .category(categoryMapper.toDto(from.getCategory()))
                 .title(from.getTitle())
                 .annotation(from.getAnnotation())
-                .eventDate(dateTimeToString(from.getEventDate()))
+                .eventDate(dateTimeMapper.dateTimeToString(from.getEventDate()))
                 .paid(from.getPaid())
                 .confirmedRequests(from.getConfirmedRequests())
                 .views(views);
@@ -89,7 +73,7 @@ public class EventMapper {
                 .title(from.getTitle())
                 .annotation(from.getAnnotation())
                 .description(from.getDescription())
-                .eventDate(stringToDateTime(from.getEventDate()))
+                .eventDate(dateTimeMapper.stringToDateTime(from.getEventDate()))
                 .locationLat(from.getLocation().getLat())
                 .locationLon(from.getLocation().getLon())
                 .paid(from.isPaid())

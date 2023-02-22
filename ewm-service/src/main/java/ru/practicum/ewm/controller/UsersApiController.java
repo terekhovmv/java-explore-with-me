@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import ru.practicum.ewm.api.UsersApi;
 import ru.practicum.ewm.api.dto.*;
+import ru.practicum.ewm.api.dto.validation.NewEventDtoValidator;
 import ru.practicum.ewm.event.service.EventService;
 
 import java.util.List;
@@ -16,9 +17,12 @@ public class UsersApiController implements UsersApi {
 
     private final EventService eventService;
 
+    private final NewEventDtoValidator newEventDtoValidator;
+
     @Override
     public ResponseEntity<EventFullDto> addEvent(Long userId, NewEventDto body) {
-        //TODO validate body
+        newEventDtoValidator.requireValid(body);
+
         return new ResponseEntity<>(
                 eventService.add(userId, body),
                 HttpStatus.CREATED

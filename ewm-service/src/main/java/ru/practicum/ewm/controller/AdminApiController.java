@@ -6,10 +6,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import ru.practicum.ewm.api.AdminApi;
 import ru.practicum.ewm.api.dto.*;
-import ru.practicum.ewm.category.service.CategoryService;
 import ru.practicum.ewm.api.dto.validation.NewCategoryDtoValidator;
-import ru.practicum.ewm.user.service.UserService;
 import ru.practicum.ewm.api.dto.validation.NewUserDtoValidator;
+import ru.practicum.ewm.category.service.CategoryService;
+import ru.practicum.ewm.user.service.UserService;
 
 import java.util.List;
 
