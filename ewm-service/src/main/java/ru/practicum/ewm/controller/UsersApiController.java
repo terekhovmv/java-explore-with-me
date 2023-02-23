@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import ru.practicum.ewm.api.UsersApi;
 import ru.practicum.ewm.api.dto.*;
 import ru.practicum.ewm.api.dto.validation.NewEventDtoValidator;
+import ru.practicum.ewm.api.dto.validation.RandomAccessPageRequestValidator;
 import ru.practicum.ewm.event.service.EventService;
 import ru.practicum.ewm.request.service.RequestService;
 
@@ -21,6 +22,8 @@ public class UsersApiController implements UsersApi {
     private final RequestService requestService;
 
     private final NewEventDtoValidator newEventDtoValidator;
+
+    private final RandomAccessPageRequestValidator randomAccessPageRequestValidator;
 
     @Override
     public ResponseEntity<EventFullDto> addEvent(Long userId, NewEventDto body) {
@@ -45,9 +48,13 @@ public class UsersApiController implements UsersApi {
     }
 
     @Override
-    public ResponseEntity<List<EventShortDto>> getEvents(Long userId, Integer from, Integer size) {
-        //TODO
-        throw new UnsupportedOperationException();
+    public ResponseEntity<List<EventShortDto>> getInitiatedEvents(Long userId, Integer from, Integer size) {
+        randomAccessPageRequestValidator.requireValid(from, size);
+
+        return new ResponseEntity<>(
+                eventService.getInitiated(userId, from, size),
+                HttpStatus.OK
+        );
     }
 
     @Override

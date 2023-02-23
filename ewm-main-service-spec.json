@@ -1269,7 +1269,7 @@
     "/users/{userId}/events": {
       "get": {
         "description": "В случае, если по заданным фильтрам не найдено ни одного события, возвращает пустой список",
-        "operationId": "getEvents",
+        "operationId": "getInitiatedEvents",
         "parameters": [
           {
             "description": "id текущего пользователя",

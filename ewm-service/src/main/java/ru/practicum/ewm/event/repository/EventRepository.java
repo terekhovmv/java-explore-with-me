@@ -1,5 +1,7 @@
 package ru.practicum.ewm.event.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,4 +20,6 @@ public interface EventRepository extends JpaRepository<Event, Long>, CustomEvent
     @Modifying
     @Query("UPDATE Event e SET e.confirmedRequests = e.confirmedRequests + 1 WHERE e.id = :id")
     void incrementConfirmedRequests(@Param("id") long id);
+
+    Page<Event> findAllByInitiatorId(long initiatorId, Pageable pageable);
 }

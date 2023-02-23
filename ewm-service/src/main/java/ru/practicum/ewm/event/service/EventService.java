@@ -1,6 +1,7 @@
 package ru.practicum.ewm.event.service;
 
 import ru.practicum.ewm.api.dto.EventFullDto;
+import ru.practicum.ewm.api.dto.EventShortDto;
 import ru.practicum.ewm.api.dto.NewEventDto;
 import ru.practicum.ewm.api.dto.UpdateEventAdminDto;
 
@@ -21,4 +22,6 @@ public interface EventService {
             int from,
             int size
     );
+
+    List<EventShortDto> getInitiated(long initiatorId, int from, int size);
 }

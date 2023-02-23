@@ -2,8 +2,10 @@ package ru.practicum.ewm.event.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.ewm.api.dto.EventFullDto;
+import ru.practicum.ewm.api.dto.EventShortDto;
 import ru.practicum.ewm.api.dto.NewEventDto;
 import ru.practicum.ewm.api.dto.UpdateEventAdminDto;
 import ru.practicum.ewm.api.dto.mapping.DateTimeMapper;
@@ -15,6 +17,7 @@ import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.event.model.EventState;
 import ru.practicum.ewm.event.repository.EventRepository;
 import ru.practicum.ewm.exception.ForbiddenException;
+import ru.practicum.ewm.pagination.RandomAccessPageRequest;
 import ru.practicum.ewm.user.model.User;
 import ru.practicum.ewm.user.repository.UserRepository;
 
@@ -125,6 +128,22 @@ public class EventServiceImpl implements EventService {
         return found
                 .stream()
                 .map(item -> eventMapper.toDto(item, 0/*views*/))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<EventShortDto> getInitiated(long initiatorId, int from, int size) {
+        return eventRepository
+                .findAllByInitiatorId(
+                        initiatorId,
+                        RandomAccessPageRequest.of(
+                                from,
+                                size,
+                                Sort.by(Sort.Direction.ASC, "eventDate")
+                        )
+                )
+                .stream()
+                .map(item -> eventMapper.toShortDto(item, /*TODO*/0))
                 .collect(Collectors.toList());
     }
 }
