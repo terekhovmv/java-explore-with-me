@@ -6,7 +6,7 @@ import ru.practicum.ewm.event.model.EventState;
 
 @Component
 public class EventStateMapper {
-    EventFullDto.StateEnum toDtoState(EventState from) {
+    public EventFullDto.StateEnum toDtoState(EventState from) {
         switch (from) {
             case PENDING:
                 return EventFullDto.StateEnum.PENDING;
@@ -19,7 +19,7 @@ public class EventStateMapper {
         }
     }
 
-    EventState toState(EventFullDto.StateEnum from) {
+    public EventState toState(EventFullDto.StateEnum from) {
         switch (from) {
             case PENDING:
                 return EventState.PENDING;

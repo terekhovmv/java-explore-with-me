@@ -64,6 +64,20 @@ public class BaseDtoValidator {
         }
     }
 
+    protected void requireInRange(String path, Integer value, Integer min, Integer max) {
+        if (inRange(value, min, max)) {
+            return;
+        }
+
+        throw new ValidationException("Unsupported value of provided " + path);
+    }
+
+    protected void requireInRangeOrNull(String path, Integer value, Integer min, Integer max) {
+        if (value != null) {
+            requireInRange(path, value, min, max);
+        }
+    }
+
     protected boolean isNotBlank(String value) {
         return StringUtils.isNotBlank(value);
     }
@@ -82,5 +96,13 @@ public class BaseDtoValidator {
 
     protected boolean isEmail(String value) {
         return EmailValidator.getInstance().isValid(value);
+    }
+
+    protected boolean inRange(int value, Integer min, Integer max) {
+        return (
+                (min == null) || (value >= min)
+        ) && (
+                (max == null) || (value <= max)
+        );
     }
 }

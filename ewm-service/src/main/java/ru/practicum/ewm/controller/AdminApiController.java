@@ -6,14 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import ru.practicum.ewm.api.AdminApi;
 import ru.practicum.ewm.api.dto.*;
-import ru.practicum.ewm.api.dto.validation.NewCategoryDtoValidator;
-import ru.practicum.ewm.api.dto.validation.NewUserDtoValidator;
-import ru.practicum.ewm.api.dto.validation.UpdateCategoryDtoValidator;
-import ru.practicum.ewm.api.dto.validation.UpdateEventAdminDtoValidator;
+import ru.practicum.ewm.api.dto.validation.*;
 import ru.practicum.ewm.category.service.CategoryService;
 import ru.practicum.ewm.event.service.EventService;
 import ru.practicum.ewm.user.service.UserService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -32,6 +30,12 @@ public class AdminApiController implements AdminApi {
     private final NewUserDtoValidator newUserDtoValidator;
 
     private final UpdateEventAdminDtoValidator updateEventAdminDtoValidator;
+
+    private final StringDateTimeValidator stringDateTimeValidator;
+
+    private final StringStateEnumValidator stringStateEnumValidator;
+
+    private final RandomAccessPageRequestValidator randomAccessPageRequestValidator;
 
     @Override
     public ResponseEntity<CategoryDto> addCategory(NewCategoryDto body) {
@@ -84,9 +88,16 @@ public class AdminApiController implements AdminApi {
     }
 
     @Override
-    public ResponseEntity<List<EventFullDto>> getEvents2(List<Long> users, List<String> states, List<Long> categories, String rangeStart, String rangeEnd, Integer from, Integer size) {
-        //TODO
-        throw new UnsupportedOperationException();
+    public ResponseEntity<List<EventFullDto>> getEventsAdmin(List<Long> users, List<String> states, List<Long> categories, String rangeStart, String rangeEnd, Integer from, Integer size) {
+        List<EventFullDto.StateEnum> filterStates = stringStateEnumValidator.requireValidOrNull(states, "states");
+        LocalDateTime filterStart = stringDateTimeValidator.requireValidOrNull(rangeStart, "rangeStart");
+        LocalDateTime filterEnd = stringDateTimeValidator.requireValidOrNull(rangeEnd, "rangeEnd");
+        randomAccessPageRequestValidator.requireValid(from, size);
+
+        return new ResponseEntity<>(
+                eventService.findByAdmin(users, filterStates, categories, filterStart, filterEnd, from, size),
+                HttpStatus.OK
+        );
     }
 
     @Override

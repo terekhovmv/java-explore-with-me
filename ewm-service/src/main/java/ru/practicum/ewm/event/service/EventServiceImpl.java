@@ -10,12 +10,17 @@ import ru.practicum.ewm.api.dto.mapping.DateTimeMapper;
 import ru.practicum.ewm.category.model.Category;
 import ru.practicum.ewm.category.repository.CategoryRepository;
 import ru.practicum.ewm.event.mapping.EventMapper;
+import ru.practicum.ewm.event.mapping.EventStateMapper;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.event.model.EventState;
 import ru.practicum.ewm.event.repository.EventRepository;
 import ru.practicum.ewm.exception.ForbiddenException;
 import ru.practicum.ewm.user.model.User;
 import ru.practicum.ewm.user.repository.UserRepository;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -31,6 +36,8 @@ public class EventServiceImpl implements EventService {
     private final EventMapper eventMapper;
 
     private final DateTimeMapper dateTimeMapper;
+
+    private final EventStateMapper eventStateMapper;
 
     @Override
     public EventFullDto add(long userId, NewEventDto dto) {
@@ -92,5 +99,32 @@ public class EventServiceImpl implements EventService {
         Event updated = eventRepository.save(toUpdate);
         log.info("Event #'{}' was successfully updated", id);
         return eventMapper.toDto(updated, /*TODO*/0);
+    }
+
+    @Override
+    public List<EventFullDto> findByAdmin(
+            List<Long> filterUsers,
+            List<EventFullDto.StateEnum> filterStates,
+            List<Long> filterCategories,
+            LocalDateTime filterStart,
+            LocalDateTime filterEnd,
+            int from,
+            int size
+    ) {
+        List<Event> found = eventRepository.find(
+                filterUsers,
+                (filterStates == null)
+                        ? null
+                        : filterStates.stream().map(item -> eventStateMapper.toState(item)).collect(Collectors.toList()),
+                filterCategories,
+                filterStart,
+                filterEnd,
+                from,
+                size
+        );
+        return found
+                .stream()
+                .map(item -> eventMapper.toDto(item, 0/*views*/))
+                .collect(Collectors.toList());
     }
 }

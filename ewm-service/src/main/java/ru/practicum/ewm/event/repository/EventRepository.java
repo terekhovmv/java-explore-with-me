@@ -7,7 +7,7 @@ import org.springframework.data.repository.query.Param;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.exception.NotFoundException;
 
-public interface EventRepository extends JpaRepository<Event, Long> {
+public interface EventRepository extends JpaRepository<Event, Long>, CustomEventRepository {
     default Event require(long id) {
         return findById(id)
                 .orElseThrow(
