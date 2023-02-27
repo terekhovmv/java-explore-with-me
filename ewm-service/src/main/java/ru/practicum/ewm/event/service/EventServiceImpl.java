@@ -20,6 +20,7 @@ import ru.practicum.ewm.exception.ForbiddenException;
 import ru.practicum.ewm.pagination.RandomAccessPageRequest;
 import ru.practicum.ewm.user.model.User;
 import ru.practicum.ewm.user.repository.UserRepository;
+import ru.practicum.stats.client.StatsProvider;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,17 +31,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EventServiceImpl implements EventService {
 
+    private static final String GET_EVENT_ENDPOINT_URI = "/events/";
     private final UserRepository userRepository;
-
     private final CategoryRepository categoryRepository;
-
     private final EventRepository eventRepository;
-
     private final EventMapper eventMapper;
-
     private final DateTimeMapper dateTimeMapper;
-
     private final EventStateMapper eventStateMapper;
+    private final StatsProvider statsProvider;
 
     @Override
     public EventFullDto add(long userId, NewEventDto dto) {
@@ -51,7 +49,7 @@ public class EventServiceImpl implements EventService {
                 eventMapper.transientFromDto(dto, initiator, category)
         );
         log.info("Event '{}' was successfully added with id {}", created.getTitle(), created.getId());
-        return eventMapper.toDto(created, 0);
+        return eventMapper.toDto(created, null);
     }
 
     @Override
@@ -101,7 +99,9 @@ public class EventServiceImpl implements EventService {
 
         Event updated = eventRepository.save(toUpdate);
         log.info("Event #'{}' was successfully updated", id);
-        return eventMapper.toDto(updated, /*TODO*/0);
+
+        EventStats stats = new EventStats(statsProvider, updated);
+        return eventMapper.toDto(updated, stats);
     }
 
     @Override
@@ -125,15 +125,18 @@ public class EventServiceImpl implements EventService {
                 from,
                 size
         );
+
+        EventStats stats = new EventStats(statsProvider, found);
+
         return found
                 .stream()
-                .map(item -> eventMapper.toDto(item, 0/*views*/))
+                .map(item -> eventMapper.toDto(item, stats))
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<EventShortDto> getInitiated(long initiatorId, int from, int size) {
-        return eventRepository
+        List<Event> found = eventRepository
                 .findAllByInitiatorId(
                         initiatorId,
                         RandomAccessPageRequest.of(
@@ -142,8 +145,13 @@ public class EventServiceImpl implements EventService {
                                 Sort.by(Sort.Direction.ASC, "eventDate")
                         )
                 )
+                .getContent();
+
+        EventStats stats = new EventStats(statsProvider, found);
+
+        return found
                 .stream()
-                .map(item -> eventMapper.toShortDto(item, /*TODO*/0))
+                .map(item -> eventMapper.toShortDto(item, stats))
                 .collect(Collectors.toList());
     }
 }

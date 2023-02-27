@@ -10,6 +10,7 @@ import ru.practicum.ewm.api.dto.mapping.DateTimeMapper;
 import ru.practicum.ewm.category.mapping.CategoryMapper;
 import ru.practicum.ewm.category.model.Category;
 import ru.practicum.ewm.event.model.Event;
+import ru.practicum.ewm.event.service.EventStats;
 import ru.practicum.ewm.user.mapping.UserMapper;
 import ru.practicum.ewm.user.model.User;
 
@@ -25,7 +26,7 @@ public class EventMapper {
 
     private final DateTimeMapper dateTimeMapper;
 
-    public EventFullDto toDto(Event from, long views) {
+    public EventFullDto toDto(Event from, EventStats stats) {
         return new EventFullDto()
                 .id(from.getId())
                 .initiator(userMapper.toShortDto(from.getInitiator()))
@@ -46,10 +47,10 @@ public class EventMapper {
                 .confirmedRequests(from.getConfirmedRequests())
                 .createdOn(dateTimeMapper.dateTimeToString(from.getCreatedOn()))
                 .publishedOn(dateTimeMapper.dateTimeToString(from.getPublishedOn()))
-                .views(views);
+                .views((stats != null) ? stats.getViews(from) : 0);
     }
 
-    public EventShortDto toShortDto(Event from, long views) {
+    public EventShortDto toShortDto(Event from, EventStats stats) {
         return new EventShortDto()
                 .id(from.getId())
                 .initiator(userMapper.toShortDto(from.getInitiator()))
@@ -59,7 +60,7 @@ public class EventMapper {
                 .eventDate(dateTimeMapper.dateTimeToString(from.getEventDate()))
                 .paid(from.getPaid())
                 .confirmedRequests(from.getConfirmedRequests())
-                .views(views);
+                .views((stats != null) ? stats.getViews(from) : 0);
     }
 
     public Event transientFromDto(NewEventDto from, User initiator, Category category) {
