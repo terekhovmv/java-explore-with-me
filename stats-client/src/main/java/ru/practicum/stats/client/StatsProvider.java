@@ -27,8 +27,7 @@ public class StatsProvider {
     }
 
     public Map<String, Long> getStats(String appName, Collection<String> uris, LocalDateTime start, LocalDateTime end, boolean unique) {
-        StringBuilder request = new StringBuilder("/stats?");
-        request.append("?uris=");
+        StringBuilder request = new StringBuilder("/stats?uris=");
         request.append(String.join(",", uris));
         if (start != null) {
             request.append("&start=");
