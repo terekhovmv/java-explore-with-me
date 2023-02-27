@@ -9,6 +9,8 @@ import org.springframework.data.repository.query.Param;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.exception.NotFoundException;
 
+import java.util.Optional;
+
 public interface EventRepository extends JpaRepository<Event, Long>, CustomEventRepository {
     default Event require(long id) {
         return findById(id)
@@ -22,4 +24,10 @@ public interface EventRepository extends JpaRepository<Event, Long>, CustomEvent
     void incrementConfirmedRequests(@Param("id") long id);
 
     Page<Event> findAllByInitiatorId(long initiatorId, Pageable pageable);
+
+    @Query(
+            "SELECT e FROM Event e JOIN FETCH e.category JOIN FETCH e.initiator " +
+                    "WHERE e.id = :id AND e.state = ru.practicum.ewm.event.model.EventState.PUBLISHED"
+    )
+    Optional<Event> findPublishedById(@Param("id") long id);
 }

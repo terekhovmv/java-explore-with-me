@@ -17,6 +17,7 @@ import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.event.model.EventState;
 import ru.practicum.ewm.event.repository.EventRepository;
 import ru.practicum.ewm.exception.ForbiddenException;
+import ru.practicum.ewm.exception.NotFoundException;
 import ru.practicum.ewm.pagination.RandomAccessPageRequest;
 import ru.practicum.ewm.user.model.User;
 import ru.practicum.ewm.user.repository.UserRepository;
@@ -153,5 +154,17 @@ public class EventServiceImpl implements EventService {
                 .stream()
                 .map(item -> eventMapper.toShortDto(item, stats))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public EventFullDto getPublic(long id) {
+        Event found = eventRepository
+                .findPublishedById(id)
+                .orElseThrow(
+                        () -> new NotFoundException(String.format("Event with id=%d was not found", id))
+                );
+
+        EventStats stats = new EventStats(statsProvider, found);
+        return eventMapper.toDto(found, stats);
     }
 }
