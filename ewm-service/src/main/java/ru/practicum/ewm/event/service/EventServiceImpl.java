@@ -118,7 +118,7 @@ public class EventServiceImpl implements EventService {
                 filterUsers,
                 (filterStates == null)
                         ? null
-                        : filterStates.stream().map(item -> eventStateMapper.toState(item)).collect(Collectors.toList()),
+                        : filterStates.stream().map(eventStateMapper::toState).collect(Collectors.toList()),
                 filterCategories,
                 filterStart,
                 filterEnd,

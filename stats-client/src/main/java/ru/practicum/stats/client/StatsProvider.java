@@ -19,7 +19,7 @@ public class StatsProvider {
     private final StatsClientConfiguration configuration;
     private final WebClient client;
 
-    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DtoFormat.DATE_TIME_FORMAT);
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(DtoFormat.DATE_TIME_FORMAT);
 
     public StatsProvider(StatsClientConfiguration configuration, WebClientFactory webClientFactory) {
         this.configuration = configuration;
@@ -29,7 +29,7 @@ public class StatsProvider {
     public Map<String, Long> getStats(String appName, Collection<String> uris, LocalDateTime start, LocalDateTime end, boolean unique) {
         StringBuilder request = new StringBuilder("/stats?");
         request.append("?uris=");
-        request.append(uris.stream().collect(Collectors.joining(",")));
+        request.append(String.join(",", uris));
         if (start != null) {
             request.append("&start=");
             request.append(dateTimeFormatter.format(start));
@@ -50,6 +50,10 @@ public class StatsProvider {
                 .bodyToMono(new ParameterizedTypeReference<List<SummaryDto>>() {
                 })
                 .block();
+
+        if (result == null) {
+            return Map.of();
+        }
 
         return result
                 .stream()
