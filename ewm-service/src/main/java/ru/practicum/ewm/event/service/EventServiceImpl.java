@@ -157,6 +157,18 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public EventFullDto getInitiated(long initiatorId, long id) {
+        Event found = eventRepository
+                .findFirstByIdAndInitiatorId(id, initiatorId)
+                .orElseThrow(
+                        () -> new NotFoundException(String.format("Event with id=%d was not found", id))
+                );
+
+        EventStats stats = new EventStats(statsProvider, found);
+        return eventMapper.toDto(found, stats);
+    }
+
+    @Override
     public EventFullDto getPublic(long id) {
         Event found = eventRepository
                 .findPublishedById(id)

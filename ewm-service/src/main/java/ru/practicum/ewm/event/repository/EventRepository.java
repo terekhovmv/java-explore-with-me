@@ -25,6 +25,8 @@ public interface EventRepository extends JpaRepository<Event, Long>, CustomEvent
 
     Page<Event> findAllByInitiatorId(long initiatorId, Pageable pageable);
 
+    Optional<Event> findFirstByIdAndInitiatorId(long id, long initiatorId);
+
     @Query(
             "SELECT e FROM Event e JOIN FETCH e.category JOIN FETCH e.initiator " +
                     "WHERE e.id = :id AND e.state = ru.practicum.ewm.event.model.EventState.PUBLISHED"

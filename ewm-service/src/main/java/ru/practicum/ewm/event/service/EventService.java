@@ -25,5 +25,7 @@ public interface EventService {
 
     List<EventShortDto> getInitiated(long initiatorId, int from, int size);
 
+    EventFullDto getInitiated(long initiatorId, long id);
+
     EventFullDto getPublic(long id);
 }

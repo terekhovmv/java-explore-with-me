@@ -42,9 +42,11 @@ public class UsersApiController implements UsersApi {
     }
 
     @Override
-    public ResponseEntity<EventFullDto> getEvent(Long userId, Long eventId) {
-        //TODO
-        throw new UnsupportedOperationException();
+    public ResponseEntity<EventFullDto> getInitiatedEvent(Long userId, Long eventId) {
+        return new ResponseEntity<>(
+                eventService.getInitiated(userId, eventId),
+                HttpStatus.OK
+        );
     }
 
     @Override

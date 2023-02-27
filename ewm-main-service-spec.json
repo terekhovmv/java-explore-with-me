@@ -1419,7 +1419,7 @@
     "/users/{userId}/events/{eventId}": {
       "get": {
         "description": "В случае, если события с заданным id не найдено, возвращает статус код 404",
-        "operationId": "getEvent",
+        "operationId": "getInitiatedEvent",
         "parameters": [
           {
             "description": "id текущего пользователя",
