@@ -8,7 +8,7 @@ import ru.practicum.ewm.api.UsersApi;
 import ru.practicum.ewm.api.dto.*;
 import ru.practicum.ewm.api.dto.validation.NewEventDtoValidator;
 import ru.practicum.ewm.api.dto.validation.RandomAccessPageRequestValidator;
-import ru.practicum.ewm.event.service.EventService;
+import ru.practicum.ewm.event.service.EventPrivateService;
 import ru.practicum.ewm.request.service.RequestService;
 
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UsersApiController implements UsersApi {
 
-    private final EventService eventService;
+    private final EventPrivateService eventPrivateService;
 
     private final RequestService requestService;
 
@@ -30,7 +30,7 @@ public class UsersApiController implements UsersApi {
         newEventDtoValidator.requireValid(body);
 
         return new ResponseEntity<>(
-                eventService.add(userId, body),
+                eventPrivateService.add(userId, body),
                 HttpStatus.CREATED
         );
     }
@@ -44,7 +44,7 @@ public class UsersApiController implements UsersApi {
     @Override
     public ResponseEntity<EventFullDto> getInitiatedEvent(Long userId, Long eventId) {
         return new ResponseEntity<>(
-                eventService.getInitiated(userId, eventId),
+                eventPrivateService.get(userId, eventId),
                 HttpStatus.OK
         );
     }
@@ -54,7 +54,7 @@ public class UsersApiController implements UsersApi {
         randomAccessPageRequestValidator.requireValid(from, size);
 
         return new ResponseEntity<>(
-                eventService.getInitiated(userId, from, size),
+                eventPrivateService.getMany(userId, from, size),
                 HttpStatus.OK
         );
     }

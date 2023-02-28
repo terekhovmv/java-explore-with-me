@@ -12,7 +12,7 @@ import ru.practicum.ewm.api.dto.validation.StringDateTimeValidator;
 import ru.practicum.ewm.api.dto.validation.StringEventSortValidator;
 import ru.practicum.ewm.api.dto.validation.StringStateEnumValidator;
 import ru.practicum.ewm.event.model.EventSort;
-import ru.practicum.ewm.event.service.EventService;
+import ru.practicum.ewm.event.service.EventPublicService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EventsApiController implements EventsApi {
 
-    private final EventService service;
+    private final EventPublicService service;
 
     private final StringDateTimeValidator stringDateTimeValidator;
 
@@ -34,7 +34,7 @@ public class EventsApiController implements EventsApi {
     @Override
     public ResponseEntity<EventFullDto> getEventPublic(Long id) {
         return new ResponseEntity<>(
-                service.getPublic(id),
+                service.get(id),
                 HttpStatus.OK
         );
     }
@@ -57,7 +57,17 @@ public class EventsApiController implements EventsApi {
         randomAccessPageRequestValidator.requireValid(from, size);
 
         return new ResponseEntity<>(
-                service.getPublic(text, categories, paid, filterStart, filterEnd, onlyAvailable, eventSort, from, size),
+                service.find(
+                        text,
+                        categories,
+                        paid,
+                        filterStart,
+                        filterEnd,
+                        onlyAvailable,
+                        eventSort,
+                        from,
+                        size
+                ),
                 HttpStatus.OK
         );
     }

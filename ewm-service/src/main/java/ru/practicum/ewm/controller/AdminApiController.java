@@ -8,7 +8,7 @@ import ru.practicum.ewm.api.AdminApi;
 import ru.practicum.ewm.api.dto.*;
 import ru.practicum.ewm.api.dto.validation.*;
 import ru.practicum.ewm.category.service.CategoryService;
-import ru.practicum.ewm.event.service.EventService;
+import ru.practicum.ewm.event.service.EventAdminService;
 import ru.practicum.ewm.user.service.UserService;
 
 import java.time.LocalDateTime;
@@ -21,7 +21,7 @@ public class AdminApiController implements AdminApi {
 
     private final UserService userService;
 
-    private final EventService eventService;
+    private final EventAdminService eventAdminService;
 
     private final NewCategoryDtoValidator newCategoryDtoValidator;
 
@@ -95,7 +95,15 @@ public class AdminApiController implements AdminApi {
         randomAccessPageRequestValidator.requireValid(from, size);
 
         return new ResponseEntity<>(
-                eventService.findByAdmin(users, filterStates, categories, filterStart, filterEnd, from, size),
+                eventAdminService.find(
+                        users,
+                        filterStates,
+                        categories,
+                        filterStart,
+                        filterEnd,
+                        from,
+                        size
+                ),
                 HttpStatus.OK
         );
     }
@@ -105,7 +113,7 @@ public class AdminApiController implements AdminApi {
         updateEventAdminDtoValidator.requireValid(body);
 
         return new ResponseEntity<>(
-                eventService.adminUpdate(eventId, body),
+                eventAdminService.update(eventId, body),
                 HttpStatus.OK
         );
     }

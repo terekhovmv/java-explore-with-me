@@ -1,4 +1,4 @@
-package ru.practicum.ewm.event.service;
+package ru.practicum.ewm.event.service.impl;
 
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.stats.client.StatsProvider;
