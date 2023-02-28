@@ -87,7 +87,9 @@ public class UsersApiController implements UsersApi {
 
     @Override
     public ResponseEntity<List<ParticipationRequestDto>> getUserRequests(Long userId) {
-        //TODO
-        throw new UnsupportedOperationException();
+        return new ResponseEntity<>(
+                requestPrivateService.getMany(userId),
+                HttpStatus.OK
+        );
     }
 }

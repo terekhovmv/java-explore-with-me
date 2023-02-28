@@ -17,6 +17,8 @@ import ru.practicum.ewm.user.model.User;
 import ru.practicum.ewm.user.repository.UserRepository;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -72,5 +74,14 @@ public class RequestPrivateServiceImpl implements RequestPrivateService {
                 created.getId()
         );
         return mapper.toDto(created);
+    }
+
+    public List<ParticipationRequestDto> getMany(long requesterId) {
+        List<Request> found = requestRepository.findAllByRequesterId(requesterId);
+
+        return found
+                .stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
     }
 }

@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ru.practicum.ewm.exception.NotFoundException;
 import ru.practicum.ewm.request.model.Request;
 
+import java.util.List;
+
 public interface RequestRepository extends JpaRepository<Request, Long> {
     default Request require(long id) {
         return findById(id)
@@ -12,4 +14,5 @@ public interface RequestRepository extends JpaRepository<Request, Long> {
                 );
     }
 
+    List<Request> findAllByRequesterId(long requesterId);
 }
