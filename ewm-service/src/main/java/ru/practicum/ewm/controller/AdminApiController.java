@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller;
 import ru.practicum.ewm.api.AdminApi;
 import ru.practicum.ewm.api.dto.*;
 import ru.practicum.ewm.api.dto.validation.*;
-import ru.practicum.ewm.category.service.CategoryService;
+import ru.practicum.ewm.category.service.CategoryAdminService;
 import ru.practicum.ewm.event.service.EventAdminService;
 import ru.practicum.ewm.user.service.UserService;
 
@@ -17,7 +17,7 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class AdminApiController implements AdminApi {
-    private final CategoryService categoryService;
+    private final CategoryAdminService categoryAdminService;
 
     private final UserService userService;
 
@@ -42,14 +42,14 @@ public class AdminApiController implements AdminApi {
         newCategoryDtoValidator.requireValid(body);
 
         return new ResponseEntity<>(
-                categoryService.add(body),
+                categoryAdminService.add(body),
                 HttpStatus.CREATED
         );
     }
 
     @Override
     public ResponseEntity<Void> deleteCategory(Long catId) {
-        categoryService.remove(catId);
+        categoryAdminService.remove(catId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -58,7 +58,7 @@ public class AdminApiController implements AdminApi {
         updateCategoryDtoValidator.requireValid(body);
 
         return new ResponseEntity<>(
-                categoryService.update(catId, body),
+                categoryAdminService.update(catId, body),
                 HttpStatus.OK
         );
     }

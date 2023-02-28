@@ -6,14 +6,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import ru.practicum.ewm.api.CategoriesApi;
 import ru.practicum.ewm.api.dto.CategoryDto;
-import ru.practicum.ewm.category.service.CategoryService;
+import ru.practicum.ewm.category.service.CategoryPublicService;
 
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 public class CategoriesApiController implements CategoriesApi {
-    private final CategoryService service;
+    private final CategoryPublicService service;
 
     @Override
     public ResponseEntity<List<CategoryDto>> getCategories(Integer from, Integer size) {
