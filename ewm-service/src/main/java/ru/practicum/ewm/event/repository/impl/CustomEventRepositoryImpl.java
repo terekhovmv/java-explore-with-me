@@ -1,9 +1,10 @@
-package ru.practicum.ewm.event.repository;
+package ru.practicum.ewm.event.repository.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.event.model.EventState;
+import ru.practicum.ewm.event.repository.CustomEventRepository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.*;
