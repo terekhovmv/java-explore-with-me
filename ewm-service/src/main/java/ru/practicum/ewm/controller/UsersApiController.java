@@ -76,8 +76,10 @@ public class UsersApiController implements UsersApi {
 
     @Override
     public ResponseEntity<ParticipationRequestDto> cancelRequest(Long userId, Long requestId) {
-        //TODO
-        throw new UnsupportedOperationException();
+        return new ResponseEntity<>(
+                requestPrivateService.cancel(userId, requestId),
+                HttpStatus.OK
+        );
     }
 
     @Override

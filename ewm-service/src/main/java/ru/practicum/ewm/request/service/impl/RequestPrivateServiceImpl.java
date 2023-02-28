@@ -96,4 +96,17 @@ public class RequestPrivateServiceImpl implements RequestPrivateService {
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public ParticipationRequestDto cancel(long callerId, long requestId) {
+        Request request = requestRepository.requireRequested(requestId, callerId);
+
+        if (request.getStatus() != RequestStatus.PENDING) {
+            throw new ConflictException("Unable to cancel the request not in pending state");
+        }
+
+        request.setStatus(RequestStatus.CANCELED);
+        requestRepository.save(request);
+        return mapper.toDto(request);
+    }
 }

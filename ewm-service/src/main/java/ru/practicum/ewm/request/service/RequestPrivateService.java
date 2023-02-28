@@ -10,4 +10,6 @@ public interface RequestPrivateService {
     List<ParticipationRequestDto> getByRequester(long requesterId);
 
     List<ParticipationRequestDto> getByEvent(long callerId, long eventId);
+
+    ParticipationRequestDto cancel(long callerId, long requestId);
 }
