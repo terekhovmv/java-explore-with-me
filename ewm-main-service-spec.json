@@ -1520,7 +1520,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateEventUserRequest"
+                "$ref": "#/components/schemas/UpdateEventPrivateDto"
               }
             }
           },
@@ -2697,7 +2697,7 @@
         },
         "description": "Данные для изменения информации о событии. Если поле в запросе не указано (равно null) - значит изменение этих данных не треубется."
       },
-      "UpdateEventUserRequest": {
+      "UpdateEventPrivateDto": {
         "type": "object",
         "properties": {
           "annotation": {

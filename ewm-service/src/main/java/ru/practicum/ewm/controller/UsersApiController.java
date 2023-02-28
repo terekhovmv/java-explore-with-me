@@ -8,6 +8,7 @@ import ru.practicum.ewm.api.UsersApi;
 import ru.practicum.ewm.api.dto.*;
 import ru.practicum.ewm.api.dto.validation.NewEventDtoValidator;
 import ru.practicum.ewm.api.dto.validation.RandomAccessPageRequestValidator;
+import ru.practicum.ewm.api.dto.validation.UpdateEventPrivateDtoValidator;
 import ru.practicum.ewm.event.service.EventPrivateService;
 import ru.practicum.ewm.request.service.RequestPrivateService;
 
@@ -25,6 +26,8 @@ public class UsersApiController implements UsersApi {
 
     private final RandomAccessPageRequestValidator randomAccessPageRequestValidator;
 
+    private final UpdateEventPrivateDtoValidator updateEventPrivateDtoValidator;
+
     @Override
     public ResponseEntity<EventFullDto> addEvent(Long userId, NewEventDto body) {
         newEventDtoValidator.requireValid(body);
@@ -36,9 +39,13 @@ public class UsersApiController implements UsersApi {
     }
 
     @Override
-    public ResponseEntity<EventFullDto> updateEvent(Long userId, Long eventId, UpdateEventUserRequest body) {
-        //TODO
-        throw new UnsupportedOperationException();
+    public ResponseEntity<EventFullDto> updateEvent(Long userId, Long eventId, UpdateEventPrivateDto body) {
+        updateEventPrivateDtoValidator.requireValid(body);
+
+        return new ResponseEntity<>(
+                eventPrivateService.update(userId, eventId, body),
+                HttpStatus.OK
+        );
     }
 
     @Override
