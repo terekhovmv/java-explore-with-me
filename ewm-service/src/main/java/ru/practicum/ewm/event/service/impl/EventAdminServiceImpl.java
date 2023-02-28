@@ -60,7 +60,7 @@ public class EventAdminServiceImpl implements EventAdminService {
             toUpdate.setPaid(dto.isPaid());
         }
         if (dto.getParticipantLimit() != null) {
-            toUpdate.setParticipantLimit(dto.getParticipantLimit());
+            toUpdate.setParticipantLimit((long) dto.getParticipantLimit());
         }
         if (dto.isRequestModeration() != null) {
             toUpdate.setRequestModeration(dto.isRequestModeration());

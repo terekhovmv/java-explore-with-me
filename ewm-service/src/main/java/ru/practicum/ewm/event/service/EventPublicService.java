@@ -18,8 +18,8 @@ public interface EventPublicService {
             LocalDateTime filterEnd,
             boolean filterOnlyAvailable,
             EventSort sort,
-            Integer from,
-            Integer size
+            int from,
+            int size
     );
 }
 

@@ -14,6 +14,7 @@ import ru.practicum.stats.client.StatsProvider;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -48,10 +49,24 @@ public class EventPublicServiceImpl implements EventPublicService {
             LocalDateTime filterEnd,
             boolean filterOnlyAvailable,
             EventSort sort,
-            Integer from,
-            Integer size
+            int from,
+            int size
     ) {
-        //TODO
-        throw new UnsupportedOperationException();
+        List<Event> found = eventRepository.find(
+                filterText,
+                filterCategories,
+                filterPaid,
+                filterStart,
+                filterEnd,
+                filterOnlyAvailable,
+                sort,
+                from,
+                size
+        );
+
+        return found
+                .stream()
+                .map(eventMapper::toShortDto)
+                .collect(Collectors.toList());
     }
 }

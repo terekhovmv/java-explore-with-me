@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS events
     location_lon       REAL                                    NOT NULL,
     paid               BOOLEAN                                 NOT NULL,
     request_moderation BOOLEAN                                 NOT NULL,
-    participant_limit  INTEGER                                 NOT NULL,
+    participant_limit  BIGINT                                  NOT NULL,
     state              VARCHAR(64)                             NOT NULL,
     confirmed_requests BIGINT                                  NOT NULL,
     cached_views       BIGINT                                  NOT NULL,

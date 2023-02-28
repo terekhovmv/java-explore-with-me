@@ -58,7 +58,7 @@ public class Event {
     Boolean requestModeration;
 
     @Column(name = "participant_limit")
-    Integer participantLimit;
+    Long participantLimit;
 
     @Column(name = "state")
     @Enumerated(EnumType.STRING)
