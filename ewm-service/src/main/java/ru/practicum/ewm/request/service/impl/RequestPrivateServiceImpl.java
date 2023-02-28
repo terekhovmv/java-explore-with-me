@@ -76,7 +76,7 @@ public class RequestPrivateServiceImpl implements RequestPrivateService {
         return mapper.toDto(created);
     }
 
-    public List<ParticipationRequestDto> getMany(long requesterId) {
+    public List<ParticipationRequestDto> getByRequester(long requesterId) {
         List<Request> found = requestRepository.findAllByRequesterId(requesterId);
 
         return found

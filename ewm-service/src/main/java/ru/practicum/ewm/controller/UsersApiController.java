@@ -88,7 +88,7 @@ public class UsersApiController implements UsersApi {
     @Override
     public ResponseEntity<List<ParticipationRequestDto>> getUserRequests(Long userId) {
         return new ResponseEntity<>(
-                requestPrivateService.getMany(userId),
+                requestPrivateService.getByRequester(userId),
                 HttpStatus.OK
         );
     }

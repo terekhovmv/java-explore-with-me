@@ -7,5 +7,5 @@ import java.util.List;
 public interface RequestPrivateService {
     ParticipationRequestDto add(long requesterId, long eventId);
 
-    List<ParticipationRequestDto> getMany(long requesterId);
+    List<ParticipationRequestDto> getByRequester(long requesterId);
 }
