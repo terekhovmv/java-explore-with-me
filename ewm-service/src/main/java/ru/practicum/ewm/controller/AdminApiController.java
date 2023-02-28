@@ -9,7 +9,7 @@ import ru.practicum.ewm.api.dto.*;
 import ru.practicum.ewm.api.dto.validation.*;
 import ru.practicum.ewm.category.service.CategoryAdminService;
 import ru.practicum.ewm.event.service.EventAdminService;
-import ru.practicum.ewm.user.service.UserService;
+import ru.practicum.ewm.user.service.UserAdminService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
 public class AdminApiController implements AdminApi {
     private final CategoryAdminService categoryAdminService;
 
-    private final UserService userService;
+    private final UserAdminService userAdminService;
 
     private final EventAdminService eventAdminService;
 
@@ -68,21 +68,21 @@ public class AdminApiController implements AdminApi {
         newUserDtoValidator.requireValid(body);
 
         return new ResponseEntity<>(
-                userService.add(body),
+                userAdminService.add(body),
                 HttpStatus.CREATED
         );
     }
 
     @Override
     public ResponseEntity<Void> deleteUser(Long userId) {
-        userService.remove(userId);
+        userAdminService.remove(userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
     public ResponseEntity<List<UserDto>> getUsers(List<Long> ids, Integer from, Integer size) {
         return new ResponseEntity<>(
-                userService.getByIds(ids, from, size),
+                userAdminService.getByIds(ids, from, size),
                 HttpStatus.OK
         );
     }
