@@ -14,6 +14,7 @@ import ru.practicum.ewm.category.repository.CategoryRepository;
 import ru.practicum.ewm.event.mapping.EventMapper;
 import ru.practicum.ewm.event.mapping.EventStateMapper;
 import ru.practicum.ewm.event.model.Event;
+import ru.practicum.ewm.event.model.EventSort;
 import ru.practicum.ewm.event.model.EventState;
 import ru.practicum.ewm.event.repository.EventRepository;
 import ru.practicum.ewm.exception.ForbiddenException;
@@ -179,4 +180,21 @@ public class EventServiceImpl implements EventService {
         EventStats stats = new EventStats(statsProvider, found);
         return eventMapper.toDto(found, stats);
     }
+
+    @Override
+    public List<EventShortDto> getPublic(
+            String filterText,
+            List<Long> filterCategories,
+            Boolean filterPaid,
+            LocalDateTime filterStart,
+            LocalDateTime filterEnd,
+            boolean filterOnlyAvailable,
+            EventSort sort,
+            Integer from,
+            Integer size
+    ) {
+        //TODO
+        throw new UnsupportedOperationException();
+    }
+
 }

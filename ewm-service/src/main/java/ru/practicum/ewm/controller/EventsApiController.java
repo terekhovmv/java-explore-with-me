@@ -7,8 +7,14 @@ import org.springframework.stereotype.Controller;
 import ru.practicum.ewm.api.EventsApi;
 import ru.practicum.ewm.api.dto.EventFullDto;
 import ru.practicum.ewm.api.dto.EventShortDto;
+import ru.practicum.ewm.api.dto.validation.RandomAccessPageRequestValidator;
+import ru.practicum.ewm.api.dto.validation.StringDateTimeValidator;
+import ru.practicum.ewm.api.dto.validation.StringEventSortValidator;
+import ru.practicum.ewm.api.dto.validation.StringStateEnumValidator;
+import ru.practicum.ewm.event.model.EventSort;
 import ru.practicum.ewm.event.service.EventService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -16,6 +22,14 @@ import java.util.List;
 public class EventsApiController implements EventsApi {
 
     private final EventService service;
+
+    private final StringDateTimeValidator stringDateTimeValidator;
+
+    private final StringStateEnumValidator stringStateEnumValidator;
+
+    private final StringEventSortValidator stringEventSortValidator;
+
+    private final RandomAccessPageRequestValidator randomAccessPageRequestValidator;
 
     @Override
     public ResponseEntity<EventFullDto> getEventPublic(Long id) {
@@ -37,7 +51,14 @@ public class EventsApiController implements EventsApi {
             Integer from,
             Integer size
     ) {
-        //TODO
-        throw new UnsupportedOperationException();
+        LocalDateTime filterStart = stringDateTimeValidator.requireValidOrNull(rangeStart, "rangeStart");
+        LocalDateTime filterEnd = stringDateTimeValidator.requireValidOrNull(rangeEnd, "rangeEnd");
+        EventSort eventSort = stringEventSortValidator.requireValidOrNull(sort, "sort");
+        randomAccessPageRequestValidator.requireValid(from, size);
+
+        return new ResponseEntity<>(
+                service.getPublic(text, categories, paid, filterStart, filterEnd, onlyAvailable, eventSort, from, size),
+                HttpStatus.OK
+        );
     }
 }
