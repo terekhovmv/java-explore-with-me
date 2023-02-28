@@ -10,7 +10,6 @@ import ru.practicum.ewm.api.dto.mapping.DateTimeMapper;
 import ru.practicum.ewm.category.mapping.CategoryMapper;
 import ru.practicum.ewm.category.model.Category;
 import ru.practicum.ewm.event.model.Event;
-import ru.practicum.ewm.event.service.EventStats;
 import ru.practicum.ewm.user.mapping.UserMapper;
 import ru.practicum.ewm.user.model.User;
 
@@ -26,7 +25,7 @@ public class EventMapper {
 
     private final DateTimeMapper dateTimeMapper;
 
-    public EventFullDto toDto(Event from, EventStats stats) {
+    public EventFullDto toDto(Event from) {
         return new EventFullDto()
                 .id(from.getId())
                 .initiator(userMapper.toShortDto(from.getInitiator()))
@@ -45,12 +44,12 @@ public class EventMapper {
                 .participantLimit(from.getParticipantLimit())
                 .state(eventStateMapper.toDtoState(from.getState()))
                 .confirmedRequests(from.getConfirmedRequests())
+                .views(from.getCachedViews())
                 .createdOn(dateTimeMapper.dateTimeToString(from.getCreatedOn()))
-                .publishedOn(dateTimeMapper.dateTimeToString(from.getPublishedOn()))
-                .views((stats != null) ? stats.getViews(from) : 0);
+                .publishedOn(dateTimeMapper.dateTimeToString(from.getPublishedOn()));
     }
 
-    public EventShortDto toShortDto(Event from, EventStats stats) {
+    public EventShortDto toShortDto(Event from) {
         return new EventShortDto()
                 .id(from.getId())
                 .initiator(userMapper.toShortDto(from.getInitiator()))
@@ -60,7 +59,7 @@ public class EventMapper {
                 .eventDate(dateTimeMapper.dateTimeToString(from.getEventDate()))
                 .paid(from.getPaid())
                 .confirmedRequests(from.getConfirmedRequests())
-                .views((stats != null) ? stats.getViews(from) : 0);
+                .views(from.getCachedViews());
     }
 
     public Event transientFromDto(NewEventDto from, User initiator, Category category) {
@@ -79,6 +78,7 @@ public class EventMapper {
                 .participantLimit(from.getParticipantLimit())
                 .state(eventStateMapper.toState(EventFullDto.StateEnum.PENDING))
                 .confirmedRequests(0L)
+                .cachedViews(0L)
                 .createdOn(null)
                 .publishedOn(null)
                 .build();

@@ -24,6 +24,7 @@ import ru.practicum.ewm.user.model.User;
 import ru.practicum.ewm.user.repository.UserRepository;
 import ru.practicum.stats.client.StatsProvider;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,7 +52,7 @@ public class EventServiceImpl implements EventService {
                 eventMapper.transientFromDto(dto, initiator, category)
         );
         log.info("Event '{}' was successfully added with id {}", created.getTitle(), created.getId());
-        return eventMapper.toDto(created, null);
+        return eventMapper.toDto(created);
     }
 
     @Override
@@ -102,8 +103,7 @@ public class EventServiceImpl implements EventService {
         Event updated = eventRepository.save(toUpdate);
         log.info("Event #'{}' was successfully updated", id);
 
-        EventStats stats = new EventStats(statsProvider, updated);
-        return eventMapper.toDto(updated, stats);
+        return eventMapper.toDto(updated);
     }
 
     @Override
@@ -128,11 +128,9 @@ public class EventServiceImpl implements EventService {
                 size
         );
 
-        EventStats stats = new EventStats(statsProvider, found);
-
         return found
                 .stream()
-                .map(item -> eventMapper.toDto(item, stats))
+                .map(item -> eventMapper.toDto(item))
                 .collect(Collectors.toList());
     }
 
@@ -149,11 +147,9 @@ public class EventServiceImpl implements EventService {
                 )
                 .getContent();
 
-        EventStats stats = new EventStats(statsProvider, found);
-
         return found
                 .stream()
-                .map(item -> eventMapper.toShortDto(item, stats))
+                .map(item -> eventMapper.toShortDto(item))
                 .collect(Collectors.toList());
     }
 
@@ -165,11 +161,11 @@ public class EventServiceImpl implements EventService {
                         () -> new NotFoundException(String.format("Event with id=%d was not found", id))
                 );
 
-        EventStats stats = new EventStats(statsProvider, found);
-        return eventMapper.toDto(found, stats);
+        return eventMapper.toDto(found);
     }
 
     @Override
+    @Transactional
     public EventFullDto getPublic(long id) {
         Event found = eventRepository
                 .findPublishedById(id)
@@ -178,7 +174,9 @@ public class EventServiceImpl implements EventService {
                 );
 
         EventStats stats = new EventStats(statsProvider, found);
-        return eventMapper.toDto(found, stats);
+        eventRepository.save(stats.updateCachedViews(found));
+
+        return eventMapper.toDto(found);
     }
 
     @Override

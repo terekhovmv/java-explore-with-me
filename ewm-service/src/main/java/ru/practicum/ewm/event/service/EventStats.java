@@ -38,7 +38,11 @@ public class EventStats {
         return GET_EVENT_ENDPOINT_URI + event.getId();
     }
 
-    public long getViews(Event event) {
-        return viewsByUri.getOrDefault(getEventUri(event), 0L);
+    public Event updateCachedViews(Event event) {
+        Long views = viewsByUri.getOrDefault(getEventUri(event), null);
+        if (views != null) {
+            event.setCachedViews(views);
+        }
+        return event;
     }
 }

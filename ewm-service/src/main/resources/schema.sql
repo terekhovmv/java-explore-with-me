@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS events
     participant_limit  INTEGER                                 NOT NULL,
     state              VARCHAR(64)                             NOT NULL,
     confirmed_requests BIGINT                                  NOT NULL,
+    cached_views       BIGINT                                  NOT NULL,
     created_on         TIMESTAMP WITHOUT TIME ZONE             NOT NULL,
     published_on       TIMESTAMP WITHOUT TIME ZONE,
 

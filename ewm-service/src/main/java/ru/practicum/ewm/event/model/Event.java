@@ -73,4 +73,7 @@ public class Event {
 
     @Column(name = "published_on")
     LocalDateTime publishedOn;
+
+    @Column(name = "cached_views")
+    Long cachedViews;
 }
