@@ -81,8 +81,10 @@ public class UsersApiController implements UsersApi {
 
     @Override
     public ResponseEntity<List<ParticipationRequestDto>> getEventParticipants(Long userId, Long eventId) {
-        //TODO
-        throw new UnsupportedOperationException();
+        return new ResponseEntity<>(
+                requestPrivateService.getByEvent(userId, eventId),
+                HttpStatus.OK
+        );
     }
 
     @Override

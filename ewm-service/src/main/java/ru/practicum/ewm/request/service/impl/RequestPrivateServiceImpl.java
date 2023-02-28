@@ -84,4 +84,16 @@ public class RequestPrivateServiceImpl implements RequestPrivateService {
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<ParticipationRequestDto> getByEvent(long callerId, long eventId) {
+        Event event = eventRepository.requireInitiated(eventId, callerId);
+
+        List<Request> found = requestRepository.findAllByEventId(event.getId());
+
+        return found
+                .stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
+    }
 }

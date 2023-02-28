@@ -19,6 +19,13 @@ public interface EventRepository extends JpaRepository<Event, Long>, CustomEvent
                 );
     }
 
+    default Event requireInitiated(long id, long initiatorId) {
+        return findFirstByIdAndInitiatorId(id, initiatorId)
+                .orElseThrow(
+                        () -> new NotFoundException(String.format("Event with id=%d was not found", id))
+                );
+    }
+
     @Modifying
     @Query("UPDATE Event e SET e.confirmedRequests = e.confirmedRequests + 1 WHERE e.id = :id")
     void incrementConfirmedRequests(@Param("id") long id);

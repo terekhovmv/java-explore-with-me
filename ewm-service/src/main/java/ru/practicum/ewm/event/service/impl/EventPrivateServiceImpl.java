@@ -13,7 +13,6 @@ import ru.practicum.ewm.event.mapping.EventMapper;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.event.repository.EventRepository;
 import ru.practicum.ewm.event.service.EventPrivateService;
-import ru.practicum.ewm.exception.NotFoundException;
 import ru.practicum.ewm.pagination.RandomAccessPageRequest;
 import ru.practicum.ewm.user.model.User;
 import ru.practicum.ewm.user.repository.UserRepository;
@@ -46,11 +45,7 @@ public class EventPrivateServiceImpl implements EventPrivateService {
 
     @Override
     public EventFullDto get(long initiatorId, long id) {
-        Event found = eventRepository
-                .findFirstByIdAndInitiatorId(id, initiatorId)
-                .orElseThrow(
-                        () -> new NotFoundException(String.format("Event with id=%d was not found", id))
-                );
+        Event found = eventRepository.requireInitiated(id, initiatorId);
 
         return eventMapper.toDto(found);
     }
