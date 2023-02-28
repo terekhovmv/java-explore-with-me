@@ -1,4 +1,4 @@
-package ru.practicum.ewm.request.service;
+package ru.practicum.ewm.request.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +12,7 @@ import ru.practicum.ewm.request.mapping.RequestMapper;
 import ru.practicum.ewm.request.model.Request;
 import ru.practicum.ewm.request.model.RequestStatus;
 import ru.practicum.ewm.request.repository.RequestRepository;
+import ru.practicum.ewm.request.service.RequestPrivateService;
 import ru.practicum.ewm.user.model.User;
 import ru.practicum.ewm.user.repository.UserRepository;
 
@@ -20,7 +21,7 @@ import javax.transaction.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RequestServiceImpl implements RequestService {
+public class RequestPrivateServiceImpl implements RequestPrivateService {
 
     private final UserRepository userRepository;
 

@@ -9,7 +9,7 @@ import ru.practicum.ewm.api.dto.*;
 import ru.practicum.ewm.api.dto.validation.NewEventDtoValidator;
 import ru.practicum.ewm.api.dto.validation.RandomAccessPageRequestValidator;
 import ru.practicum.ewm.event.service.EventPrivateService;
-import ru.practicum.ewm.request.service.RequestService;
+import ru.practicum.ewm.request.service.RequestPrivateService;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class UsersApiController implements UsersApi {
 
     private final EventPrivateService eventPrivateService;
 
-    private final RequestService requestService;
+    private final RequestPrivateService requestPrivateService;
 
     private final NewEventDtoValidator newEventDtoValidator;
 
@@ -62,7 +62,7 @@ public class UsersApiController implements UsersApi {
     @Override
     public ResponseEntity<ParticipationRequestDto> addParticipationRequest(Long userId, Long eventId) {
         return new ResponseEntity<>(
-                requestService.add(userId, eventId),
+                requestPrivateService.add(userId, eventId),
                 HttpStatus.CREATED
         );
     }
