@@ -21,10 +21,7 @@ public class Compilation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @ManyToMany(
-            fetch = FetchType.EAGER,
-            cascade = {CascadeType.PERSIST, CascadeType.MERGE}
-    )
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "compilation_events",
             joinColumns = @JoinColumn(name = "compilation_id"),
