@@ -54,7 +54,7 @@ public class RequesterRequestServiceImpl implements RequesterRequestService {
         }
 
         if (!event.getRequestModeration()) {
-            eventRepository.incrementConfirmedRequests(eventId);
+            eventRepository.incrementConfirmedRequests(eventId, 1);
         }
 
         Request created = requestRepository.save(

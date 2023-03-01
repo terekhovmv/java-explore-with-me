@@ -84,8 +84,10 @@ public class UsersApiController implements UsersApi {
 
     @Override
     public ResponseEntity<EventRequestStatusUpdateResult> changeRequestStatus(Long userId, Long eventId, EventRequestStatusUpdateRequest body) {
-        //TODO
-        throw new UnsupportedOperationException();
+        return new ResponseEntity<>(
+                promoterRequestService.changeStatuses(userId, eventId, body),
+                HttpStatus.OK
+        );
     }
 
     @Override

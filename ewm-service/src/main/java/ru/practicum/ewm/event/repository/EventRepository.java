@@ -27,8 +27,8 @@ public interface EventRepository extends JpaRepository<Event, Long>, CustomEvent
     }
 
     @Modifying
-    @Query("UPDATE Event e SET e.confirmedRequests = e.confirmedRequests + 1 WHERE e.id = :id")
-    void incrementConfirmedRequests(@Param("id") long id);
+    @Query("UPDATE Event e SET e.confirmedRequests = e.confirmedRequests + :inc WHERE e.id = :id")
+    void incrementConfirmedRequests(@Param("id") long id, @Param("inc") long inc);
 
     Page<Event> findAllByInitiatorId(long initiatorId, Pageable pageable);
 
