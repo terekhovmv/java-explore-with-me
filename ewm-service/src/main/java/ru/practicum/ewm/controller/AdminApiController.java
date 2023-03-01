@@ -8,6 +8,7 @@ import ru.practicum.ewm.api.AdminApi;
 import ru.practicum.ewm.api.dto.*;
 import ru.practicum.ewm.api.dto.validation.*;
 import ru.practicum.ewm.category.service.AdminCategoryService;
+import ru.practicum.ewm.compilation.service.AdminCompilationService;
 import ru.practicum.ewm.event.service.AdminEventService;
 import ru.practicum.ewm.user.service.AdminUserService;
 
@@ -21,6 +22,7 @@ public class AdminApiController implements AdminApi {
     private final AdminUserService adminUserService;
     private final AdminCategoryService adminCategoryService;
     private final AdminEventService adminEventService;
+    private final AdminCompilationService adminCompilationService;
 
     private final NewCategoryDtoValidator newCategoryDtoValidator;
     private final UpdateCategoryDtoValidator updateCategoryDtoValidator;
@@ -113,19 +115,23 @@ public class AdminApiController implements AdminApi {
 
     @Override
     public ResponseEntity<CompilationDto> saveCompilation(NewCompilationDto body) {
-        //TODO
-        throw new UnsupportedOperationException();
+        return new ResponseEntity<>(
+                adminCompilationService.add(body),
+                HttpStatus.CREATED
+        );
     }
 
     @Override
     public ResponseEntity<CompilationDto> updateCompilation(Long compId, UpdateCompilationRequest body) {
-        //TODO
-        throw new UnsupportedOperationException();
+        return new ResponseEntity<>(
+                adminCompilationService.update(compId, body),
+                HttpStatus.OK
+        );
     }
 
     @Override
     public ResponseEntity<Void> deleteCompilation(Long compId) {
-        //TODO
-        throw new UnsupportedOperationException();
+        adminCompilationService.remove(compId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
