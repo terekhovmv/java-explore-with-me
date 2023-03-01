@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS events
     published_on       TIMESTAMP WITHOUT TIME ZONE,
 
     CONSTRAINT pk_event PRIMARY KEY (id),
-    CONSTRAINT fk_event_category FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE CASCADE,
+    CONSTRAINT fk_event_category FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE RESTRICT,
     CONSTRAINT fk_event_initiator FOREIGN KEY (initiator_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
