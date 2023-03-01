@@ -10,9 +10,8 @@ import ru.practicum.ewm.api.dto.EventShortDto;
 import ru.practicum.ewm.api.dto.validation.RandomAccessPageRequestValidator;
 import ru.practicum.ewm.api.dto.validation.StringDateTimeValidator;
 import ru.practicum.ewm.api.dto.validation.StringEventSortValidator;
-import ru.practicum.ewm.api.dto.validation.StringStateEnumValidator;
 import ru.practicum.ewm.event.model.EventSort;
-import ru.practicum.ewm.event.service.EventPublicService;
+import ru.practicum.ewm.event.service.PublicEventService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,14 +20,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EventsApiController implements EventsApi {
 
-    private final EventPublicService service;
+    private final PublicEventService service;
 
     private final StringDateTimeValidator stringDateTimeValidator;
-
-    private final StringStateEnumValidator stringStateEnumValidator;
-
     private final StringEventSortValidator stringEventSortValidator;
-
     private final RandomAccessPageRequestValidator randomAccessPageRequestValidator;
 
     @Override

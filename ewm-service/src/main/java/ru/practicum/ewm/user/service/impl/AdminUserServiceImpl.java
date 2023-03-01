@@ -10,7 +10,7 @@ import ru.practicum.ewm.pagination.RandomAccessPageRequest;
 import ru.practicum.ewm.user.mapping.UserMapper;
 import ru.practicum.ewm.user.model.User;
 import ru.practicum.ewm.user.repository.UserRepository;
-import ru.practicum.ewm.user.service.UserAdminService;
+import ru.practicum.ewm.user.service.AdminUserService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserAdminServiceImpl implements UserAdminService {
+public class AdminUserServiceImpl implements AdminUserService {
     private final UserRepository repository;
 
     private final UserMapper mapper;

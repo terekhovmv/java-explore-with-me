@@ -12,7 +12,7 @@ import ru.practicum.ewm.request.mapping.RequestMapper;
 import ru.practicum.ewm.request.model.Request;
 import ru.practicum.ewm.request.model.RequestStatus;
 import ru.practicum.ewm.request.repository.RequestRepository;
-import ru.practicum.ewm.request.service.RequestPrivateService;
+import ru.practicum.ewm.request.service.RequesterRequestService;
 import ru.practicum.ewm.user.model.User;
 import ru.practicum.ewm.user.repository.UserRepository;
 
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RequestPrivateServiceImpl implements RequestPrivateService {
+public class RequesterRequestServiceImpl implements RequesterRequestService {
 
     private final UserRepository userRepository;
 
@@ -35,8 +35,8 @@ public class RequestPrivateServiceImpl implements RequestPrivateService {
 
     @Override
     @Transactional
-    public ParticipationRequestDto add(long requesterId, long eventId) {
-        User requester = userRepository.require(requesterId);
+    public ParticipationRequestDto add(long callerId, long eventId) {
+        User requester = userRepository.require(callerId);
         Event event = eventRepository.require(eventId);
 
         if (event.getState() != EventState.PUBLISHED) {
@@ -49,7 +49,7 @@ public class RequestPrivateServiceImpl implements RequestPrivateService {
             throw new ConflictException("Participant limit exceeded");
         }
 
-        if (event.getInitiator().getId() == requesterId) {
+        if (event.getInitiator().getId() == callerId) {
             throw new ConflictException("Unable to register the request for the initiated event");
         }
 
@@ -69,27 +69,16 @@ public class RequestPrivateServiceImpl implements RequestPrivateService {
 
         log.info(
                 "Request from user #{} to event #{} was successfully registered with id {}",
-                requesterId,
+                callerId,
                 eventId,
                 created.getId()
         );
         return mapper.toDto(created);
     }
 
-    public List<ParticipationRequestDto> getByRequester(long requesterId) {
-        List<Request> found = requestRepository.findAllByRequesterId(requesterId);
-
-        return found
-                .stream()
-                .map(mapper::toDto)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<ParticipationRequestDto> getByEvent(long callerId, long eventId) {
-        Event event = eventRepository.requireInitiated(eventId, callerId);
-
-        List<Request> found = requestRepository.findAllByEventId(event.getId());
+    public List<ParticipationRequestDto> getRequested(long callerId) {
+        userRepository.require(callerId);
+        List<Request> found = requestRepository.findAllByRequesterId(callerId);
 
         return found
                 .stream()
@@ -99,6 +88,7 @@ public class RequestPrivateServiceImpl implements RequestPrivateService {
 
     @Override
     public ParticipationRequestDto cancel(long callerId, long requestId) {
+        userRepository.require(callerId);
         Request request = requestRepository.requireRequested(requestId, callerId);
 
         if (request.getStatus() != RequestStatus.PENDING) {

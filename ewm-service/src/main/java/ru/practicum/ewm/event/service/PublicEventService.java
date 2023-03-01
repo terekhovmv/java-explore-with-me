@@ -7,7 +7,7 @@ import ru.practicum.ewm.event.model.EventSort;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface EventPublicService {
+public interface PublicEventService {
     EventFullDto get(long id);
 
     List<EventShortDto> find(

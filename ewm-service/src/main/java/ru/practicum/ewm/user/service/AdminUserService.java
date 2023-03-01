@@ -5,7 +5,7 @@ import ru.practicum.ewm.api.dto.UserDto;
 
 import java.util.List;
 
-public interface UserAdminService {
+public interface AdminUserService {
     UserDto add(NewUserDto dto);
 
     void remove(long id);

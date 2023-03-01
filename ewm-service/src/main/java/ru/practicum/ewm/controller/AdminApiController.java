@@ -7,9 +7,9 @@ import org.springframework.stereotype.Controller;
 import ru.practicum.ewm.api.AdminApi;
 import ru.practicum.ewm.api.dto.*;
 import ru.practicum.ewm.api.dto.validation.*;
-import ru.practicum.ewm.category.service.CategoryAdminService;
-import ru.practicum.ewm.event.service.EventAdminService;
-import ru.practicum.ewm.user.service.UserAdminService;
+import ru.practicum.ewm.category.service.AdminCategoryService;
+import ru.practicum.ewm.event.service.AdminEventService;
+import ru.practicum.ewm.user.service.AdminUserService;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,24 +17,17 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 public class AdminApiController implements AdminApi {
-    private final CategoryAdminService categoryAdminService;
 
-    private final UserAdminService userAdminService;
-
-    private final EventAdminService eventAdminService;
+    private final AdminUserService adminUserService;
+    private final AdminCategoryService adminCategoryService;
+    private final AdminEventService adminEventService;
 
     private final NewCategoryDtoValidator newCategoryDtoValidator;
-
     private final UpdateCategoryDtoValidator updateCategoryDtoValidator;
-
     private final NewUserDtoValidator newUserDtoValidator;
-
     private final UpdateEventAdminDtoValidator updateEventAdminDtoValidator;
-
     private final StringDateTimeValidator stringDateTimeValidator;
-
     private final StringStateEnumValidator stringStateEnumValidator;
-
     private final RandomAccessPageRequestValidator randomAccessPageRequestValidator;
 
     @Override
@@ -42,14 +35,14 @@ public class AdminApiController implements AdminApi {
         newCategoryDtoValidator.requireValid(body);
 
         return new ResponseEntity<>(
-                categoryAdminService.add(body),
+                adminCategoryService.add(body),
                 HttpStatus.CREATED
         );
     }
 
     @Override
     public ResponseEntity<Void> deleteCategory(Long catId) {
-        categoryAdminService.remove(catId);
+        adminCategoryService.remove(catId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -58,7 +51,7 @@ public class AdminApiController implements AdminApi {
         updateCategoryDtoValidator.requireValid(body);
 
         return new ResponseEntity<>(
-                categoryAdminService.update(catId, body),
+                adminCategoryService.update(catId, body),
                 HttpStatus.OK
         );
     }
@@ -68,21 +61,21 @@ public class AdminApiController implements AdminApi {
         newUserDtoValidator.requireValid(body);
 
         return new ResponseEntity<>(
-                userAdminService.add(body),
+                adminUserService.add(body),
                 HttpStatus.CREATED
         );
     }
 
     @Override
     public ResponseEntity<Void> deleteUser(Long userId) {
-        userAdminService.remove(userId);
+        adminUserService.remove(userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
     public ResponseEntity<List<UserDto>> getUsers(List<Long> ids, Integer from, Integer size) {
         return new ResponseEntity<>(
-                userAdminService.getByIds(ids, from, size),
+                adminUserService.getByIds(ids, from, size),
                 HttpStatus.OK
         );
     }
@@ -95,7 +88,7 @@ public class AdminApiController implements AdminApi {
         randomAccessPageRequestValidator.requireValid(from, size);
 
         return new ResponseEntity<>(
-                eventAdminService.find(
+                adminEventService.find(
                         users,
                         filterStates,
                         categories,
@@ -113,7 +106,7 @@ public class AdminApiController implements AdminApi {
         updateEventAdminDtoValidator.requireValid(body);
 
         return new ResponseEntity<>(
-                eventAdminService.update(eventId, body),
+                adminEventService.update(eventId, body),
                 HttpStatus.OK
         );
     }

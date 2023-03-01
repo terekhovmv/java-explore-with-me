@@ -7,7 +7,7 @@ import ru.practicum.ewm.api.dto.UpdateEventPrivateDto;
 
 import java.util.List;
 
-public interface EventPrivateService {
+public interface PromoterEventService {
     EventFullDto add(long callerId, NewEventDto dto);
 
     EventFullDto update(long callerId, long id, UpdateEventPrivateDto dto);

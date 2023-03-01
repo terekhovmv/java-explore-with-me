@@ -6,7 +6,7 @@ import ru.practicum.ewm.api.dto.UpdateEventAdminDto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface EventAdminService {
+public interface AdminEventService {
     EventFullDto update(long id, UpdateEventAdminDto dto);
 
     List<EventFullDto> find(

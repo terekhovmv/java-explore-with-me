@@ -8,7 +8,7 @@ import ru.practicum.ewm.event.mapping.EventMapper;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.event.model.EventSort;
 import ru.practicum.ewm.event.repository.EventRepository;
-import ru.practicum.ewm.event.service.EventPublicService;
+import ru.practicum.ewm.event.service.PublicEventService;
 import ru.practicum.ewm.exception.NotFoundException;
 import ru.practicum.stats.client.StatsProvider;
 
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class EventPublicServiceImpl implements EventPublicService {
+public class PublicEventServiceImpl implements PublicEventService {
 
     private final EventRepository eventRepository;
 

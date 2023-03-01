@@ -8,12 +8,12 @@ import ru.practicum.ewm.api.dto.NewCategoryDto;
 import ru.practicum.ewm.category.mapping.CategoryMapper;
 import ru.practicum.ewm.category.model.Category;
 import ru.practicum.ewm.category.repository.CategoryRepository;
-import ru.practicum.ewm.category.service.CategoryAdminService;
+import ru.practicum.ewm.category.service.AdminCategoryService;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CategoryAdminServiceImpl implements CategoryAdminService {
+public class AdminCategoryServiceImpl implements AdminCategoryService {
     private final CategoryRepository repository;
 
     private final CategoryMapper mapper;

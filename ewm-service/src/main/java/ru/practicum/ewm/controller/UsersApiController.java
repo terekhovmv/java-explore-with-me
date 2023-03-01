@@ -9,8 +9,9 @@ import ru.practicum.ewm.api.dto.*;
 import ru.practicum.ewm.api.dto.validation.NewEventDtoValidator;
 import ru.practicum.ewm.api.dto.validation.RandomAccessPageRequestValidator;
 import ru.practicum.ewm.api.dto.validation.UpdateEventPrivateDtoValidator;
-import ru.practicum.ewm.event.service.EventPrivateService;
-import ru.practicum.ewm.request.service.RequestPrivateService;
+import ru.practicum.ewm.event.service.PromoterEventService;
+import ru.practicum.ewm.request.service.PromoterRequestService;
+import ru.practicum.ewm.request.service.RequesterRequestService;
 
 import java.util.List;
 
@@ -18,14 +19,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UsersApiController implements UsersApi {
 
-    private final EventPrivateService eventPrivateService;
+    private final PromoterEventService promoterEventService;
+    private final PromoterRequestService promoterRequestService;
 
-    private final RequestPrivateService requestPrivateService;
+    private final RequesterRequestService requesterRequestService;
 
     private final NewEventDtoValidator newEventDtoValidator;
-
     private final RandomAccessPageRequestValidator randomAccessPageRequestValidator;
-
     private final UpdateEventPrivateDtoValidator updateEventPrivateDtoValidator;
 
     @Override
@@ -33,7 +33,7 @@ public class UsersApiController implements UsersApi {
         newEventDtoValidator.requireValid(body);
 
         return new ResponseEntity<>(
-                eventPrivateService.add(userId, body),
+                promoterEventService.add(userId, body),
                 HttpStatus.CREATED
         );
     }
@@ -43,7 +43,7 @@ public class UsersApiController implements UsersApi {
         updateEventPrivateDtoValidator.requireValid(body);
 
         return new ResponseEntity<>(
-                eventPrivateService.update(userId, eventId, body),
+                promoterEventService.update(userId, eventId, body),
                 HttpStatus.OK
         );
     }
@@ -51,7 +51,7 @@ public class UsersApiController implements UsersApi {
     @Override
     public ResponseEntity<EventFullDto> getInitiatedEvent(Long userId, Long eventId) {
         return new ResponseEntity<>(
-                eventPrivateService.get(userId, eventId),
+                promoterEventService.get(userId, eventId),
                 HttpStatus.OK
         );
     }
@@ -61,7 +61,7 @@ public class UsersApiController implements UsersApi {
         randomAccessPageRequestValidator.requireValid(from, size);
 
         return new ResponseEntity<>(
-                eventPrivateService.getMany(userId, from, size),
+                promoterEventService.getMany(userId, from, size),
                 HttpStatus.OK
         );
     }
@@ -69,7 +69,7 @@ public class UsersApiController implements UsersApi {
     @Override
     public ResponseEntity<ParticipationRequestDto> addParticipationRequest(Long userId, Long eventId) {
         return new ResponseEntity<>(
-                requestPrivateService.add(userId, eventId),
+                requesterRequestService.add(userId, eventId),
                 HttpStatus.CREATED
         );
     }
@@ -77,7 +77,7 @@ public class UsersApiController implements UsersApi {
     @Override
     public ResponseEntity<ParticipationRequestDto> cancelRequest(Long userId, Long requestId) {
         return new ResponseEntity<>(
-                requestPrivateService.cancel(userId, requestId),
+                requesterRequestService.cancel(userId, requestId),
                 HttpStatus.OK
         );
     }
@@ -91,7 +91,7 @@ public class UsersApiController implements UsersApi {
     @Override
     public ResponseEntity<List<ParticipationRequestDto>> getEventParticipants(Long userId, Long eventId) {
         return new ResponseEntity<>(
-                requestPrivateService.getByEvent(userId, eventId),
+                promoterRequestService.getForEvent(userId, eventId),
                 HttpStatus.OK
         );
     }
@@ -99,7 +99,7 @@ public class UsersApiController implements UsersApi {
     @Override
     public ResponseEntity<List<ParticipationRequestDto>> getUserRequests(Long userId) {
         return new ResponseEntity<>(
-                requestPrivateService.getByRequester(userId),
+                requesterRequestService.getRequested(userId),
                 HttpStatus.OK
         );
     }
