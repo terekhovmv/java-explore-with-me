@@ -79,7 +79,7 @@ public class PromoterRequestServiceImpl implements PromoterRequestService {
             requests.forEach(request -> {
                 request.setStatus(RequestStatus.REJECTED);
                 requestRepository.save(request);
-                result.addConfirmedRequestsItem(mapper.toDto(request));
+                result.addRejectedRequestsItem(mapper.toDto(request));
             });
         }
         return result;
