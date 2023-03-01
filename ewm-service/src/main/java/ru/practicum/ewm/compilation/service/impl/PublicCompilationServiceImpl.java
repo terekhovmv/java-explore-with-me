@@ -9,6 +9,7 @@ import ru.practicum.ewm.compilation.repository.CompilationRepository;
 import ru.practicum.ewm.compilation.service.PublicCompilationService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +27,10 @@ public class PublicCompilationServiceImpl implements PublicCompilationService {
 
     @Override
     public List<CompilationDto> find(Boolean pinned, int from, int size) {
-        //TODO
-        return null;
+        return repository
+                .find(pinned, from, size)
+                .stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
     }
 }
