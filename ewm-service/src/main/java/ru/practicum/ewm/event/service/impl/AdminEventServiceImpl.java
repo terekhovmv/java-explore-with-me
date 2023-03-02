@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.ewm.api.dto.EventFullDto;
-import ru.practicum.ewm.api.dto.UpdateEventAdminDto;
+import ru.practicum.ewm.api.dto.UpdateEventAdminRequest;
 import ru.practicum.ewm.api.dto.mapping.DateTimeMapper;
 import ru.practicum.ewm.category.model.Category;
 import ru.practicum.ewm.category.repository.CategoryRepository;
@@ -33,7 +33,7 @@ public class AdminEventServiceImpl implements AdminEventService {
     private final EventStateMapper eventStateMapper;
 
     @Override
-    public EventFullDto update(long id, UpdateEventAdminDto dto) {
+    public EventFullDto update(long id, UpdateEventAdminRequest dto) {
         Event toUpdate = eventRepository.require(id);
 
         if (dto.getCategory() != null) {
@@ -74,7 +74,7 @@ public class AdminEventServiceImpl implements AdminEventService {
                 throw new ConflictException("The event is not in PENDING state");
             }
 
-            if (dto.getStateAction() == UpdateEventAdminDto.StateActionEnum.PUBLISH_EVENT) {
+            if (dto.getStateAction() == UpdateEventAdminRequest.StateActionEnum.PUBLISH_EVENT) {
                 if (!toUpdate.getEventDate().minusHours(PUBLISHING_DEADLINE_HOURS)
                         .isAfter(LocalDateTime.now())
                 ) {

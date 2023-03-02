@@ -1,11 +1,11 @@
 package ru.practicum.ewm.api.dto.validation;
 
 import org.springframework.stereotype.Component;
-import ru.practicum.ewm.api.dto.UpdateEventAdminDto;
+import ru.practicum.ewm.api.dto.UpdateEventAdminRequest;
 
 @Component
-public class UpdateEventAdminDtoValidator extends BaseDtoValidator {
-    public void requireValid(UpdateEventAdminDto toValidate) {
+public class UpdateEventAdminRequestValidator extends BaseDtoValidator {
+    public void requireValid(UpdateEventAdminRequest toValidate) {
         requireSizeOrNull("title", toValidate.getTitle(), 3, 100);
         requireSizeOrNull("annotation", toValidate.getAnnotation(), 20, 2000);
         requireSizeOrNull("description", toValidate.getDescription(), 20, 7000);

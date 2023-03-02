@@ -26,14 +26,14 @@ public class AdminApiController implements AdminApi {
 
     private final NewCategoryDtoValidator newCategoryDtoValidator;
     private final UpdateCategoryDtoValidator updateCategoryDtoValidator;
-    private final NewUserDtoValidator newUserDtoValidator;
-    private final UpdateEventAdminDtoValidator updateEventAdminDtoValidator;
+    private final NewUserRequestValidator NewUserRequestValidator;
+    private final UpdateEventAdminRequestValidator UpdateEventAdminRequestValidator;
     private final StringDateTimeValidator stringDateTimeValidator;
     private final StringStateEnumValidator stringStateEnumValidator;
     private final RandomAccessPageRequestValidator randomAccessPageRequestValidator;
 
     @Override
-    public ResponseEntity<CategoryDto> addCategory(NewCategoryDto body) {
+    public ResponseEntity<CategoryDto> adminAddCategory(NewCategoryDto body) {
         newCategoryDtoValidator.requireValid(body);
 
         return new ResponseEntity<>(
@@ -43,13 +43,13 @@ public class AdminApiController implements AdminApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteCategory(Long catId) {
+    public ResponseEntity<Void> adminRemoveCategory(Long catId) {
         adminCategoryService.remove(catId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
-    public ResponseEntity<CategoryDto> updateCategory(Long catId, CategoryDto body) {
+    public ResponseEntity<CategoryDto> adminUpdateCategory(Long catId, CategoryDto body) {
         updateCategoryDtoValidator.requireValid(body);
 
         return new ResponseEntity<>(
@@ -59,8 +59,8 @@ public class AdminApiController implements AdminApi {
     }
 
     @Override
-    public ResponseEntity<UserDto> registerUser(NewUserDto body) {
-        newUserDtoValidator.requireValid(body);
+    public ResponseEntity<UserDto> adminAddUser(NewUserRequest body) {
+        NewUserRequestValidator.requireValid(body);
 
         return new ResponseEntity<>(
                 adminUserService.add(body),
@@ -69,13 +69,13 @@ public class AdminApiController implements AdminApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteUser(Long userId) {
+    public ResponseEntity<Void> adminRemoveUser(Long userId) {
         adminUserService.remove(userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @Override
-    public ResponseEntity<List<UserDto>> getUsers(List<Long> ids, Integer from, Integer size) {
+    public ResponseEntity<List<UserDto>> adminGetUsers(List<Long> ids, Integer from, Integer size) {
         return new ResponseEntity<>(
                 adminUserService.getByIds(ids, from, size),
                 HttpStatus.OK
@@ -83,7 +83,15 @@ public class AdminApiController implements AdminApi {
     }
 
     @Override
-    public ResponseEntity<List<EventFullDto>> getEventsAdmin(List<Long> users, List<String> states, List<Long> categories, String rangeStart, String rangeEnd, Integer from, Integer size) {
+    public ResponseEntity<List<EventFullDto>> adminFindEvents(
+            List<Long> users,
+            List<String> states,
+            List<Long> categories,
+            String rangeStart,
+            String rangeEnd,
+            Integer from,
+            Integer size
+    ) {
         List<EventFullDto.StateEnum> filterStates = stringStateEnumValidator.requireValidOrNull(states, "states");
         LocalDateTime filterStart = stringDateTimeValidator.requireValidOrNull(rangeStart, "rangeStart");
         LocalDateTime filterEnd = stringDateTimeValidator.requireValidOrNull(rangeEnd, "rangeEnd");
@@ -104,8 +112,8 @@ public class AdminApiController implements AdminApi {
     }
 
     @Override
-    public ResponseEntity<EventFullDto> updateEvent1(Long eventId, UpdateEventAdminDto body) {
-        updateEventAdminDtoValidator.requireValid(body);
+    public ResponseEntity<EventFullDto> adminUpdateEvent(Long eventId, UpdateEventAdminRequest body) {
+        UpdateEventAdminRequestValidator.requireValid(body);
 
         return new ResponseEntity<>(
                 adminEventService.update(eventId, body),
@@ -114,7 +122,7 @@ public class AdminApiController implements AdminApi {
     }
 
     @Override
-    public ResponseEntity<CompilationDto> saveCompilation(NewCompilationDto body) {
+    public ResponseEntity<CompilationDto> adminAddCompilation(NewCompilationDto body) {
         return new ResponseEntity<>(
                 adminCompilationService.add(body),
                 HttpStatus.CREATED
@@ -122,7 +130,7 @@ public class AdminApiController implements AdminApi {
     }
 
     @Override
-    public ResponseEntity<CompilationDto> updateCompilation(Long compId, UpdateCompilationRequest body) {
+    public ResponseEntity<CompilationDto> adminUpdateCompilation(Long compId, UpdateCompilationRequest body) {
         return new ResponseEntity<>(
                 adminCompilationService.update(compId, body),
                 HttpStatus.OK
@@ -130,7 +138,7 @@ public class AdminApiController implements AdminApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteCompilation(Long compId) {
+    public ResponseEntity<Void> adminRemoveCompilation(Long compId) {
         adminCompilationService.remove(compId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

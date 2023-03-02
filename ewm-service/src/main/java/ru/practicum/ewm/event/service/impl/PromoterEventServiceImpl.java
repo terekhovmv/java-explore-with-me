@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.practicum.ewm.api.dto.EventFullDto;
 import ru.practicum.ewm.api.dto.EventShortDto;
 import ru.practicum.ewm.api.dto.NewEventDto;
-import ru.practicum.ewm.api.dto.UpdateEventPrivateDto;
+import ru.practicum.ewm.api.dto.UpdateEventUserRequest;
 import ru.practicum.ewm.api.dto.mapping.DateTimeMapper;
 import ru.practicum.ewm.category.model.Category;
 import ru.practicum.ewm.category.repository.CategoryRepository;
@@ -57,7 +57,7 @@ public class PromoterEventServiceImpl implements PromoterEventService {
     }
 
     @Override
-    public EventFullDto update(long callerId, long id, UpdateEventPrivateDto dto) {
+    public EventFullDto update(long callerId, long id, UpdateEventUserRequest dto) {
         Event toUpdate = eventRepository.requireInitiated(id, callerId);
 
         if (toUpdate.getState() == EventState.PUBLISHED) {
@@ -100,11 +100,11 @@ public class PromoterEventServiceImpl implements PromoterEventService {
         }
         if (dto.getStateAction() != null) {
             if (toUpdate.getState() == EventState.PENDING
-                    && dto.getStateAction() == UpdateEventPrivateDto.StateActionEnum.CANCEL_REVIEW
+                    && dto.getStateAction() == UpdateEventUserRequest.StateActionEnum.CANCEL_REVIEW
             ) {
                 toUpdate.setState(EventState.CANCELED);
             } else if (toUpdate.getState() == EventState.CANCELED
-                    && dto.getStateAction() == UpdateEventPrivateDto.StateActionEnum.SEND_TO_REVIEW
+                    && dto.getStateAction() == UpdateEventUserRequest.StateActionEnum.SEND_TO_REVIEW
             ) {
                 toUpdate.setState(EventState.PENDING);
             }

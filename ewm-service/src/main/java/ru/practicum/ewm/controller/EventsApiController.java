@@ -27,7 +27,7 @@ public class EventsApiController implements EventsApi {
     private final RandomAccessPageRequestValidator randomAccessPageRequestValidator;
 
     @Override
-    public ResponseEntity<EventFullDto> getEventPublic(Long id) {
+    public ResponseEntity<EventFullDto> getEvent(Long id) {
         return new ResponseEntity<>(
                 service.get(id),
                 HttpStatus.OK
@@ -35,7 +35,7 @@ public class EventsApiController implements EventsApi {
     }
 
     @Override
-    public ResponseEntity<List<EventShortDto>> getEventsPublic(
+    public ResponseEntity<List<EventShortDto>> findEvents(
             String text,
             List<Long> categories,
             Boolean paid,

@@ -8,7 +8,7 @@ import ru.practicum.ewm.api.UsersApi;
 import ru.practicum.ewm.api.dto.*;
 import ru.practicum.ewm.api.dto.validation.NewEventDtoValidator;
 import ru.practicum.ewm.api.dto.validation.RandomAccessPageRequestValidator;
-import ru.practicum.ewm.api.dto.validation.UpdateEventPrivateDtoValidator;
+import ru.practicum.ewm.api.dto.validation.UpdateEventUserRequestValidator;
 import ru.practicum.ewm.event.service.PromoterEventService;
 import ru.practicum.ewm.request.service.PromoterRequestService;
 import ru.practicum.ewm.request.service.RequesterRequestService;
@@ -26,10 +26,10 @@ public class UsersApiController implements UsersApi {
 
     private final NewEventDtoValidator newEventDtoValidator;
     private final RandomAccessPageRequestValidator randomAccessPageRequestValidator;
-    private final UpdateEventPrivateDtoValidator updateEventPrivateDtoValidator;
+    private final UpdateEventUserRequestValidator UpdateEventUserRequestValidator;
 
     @Override
-    public ResponseEntity<EventFullDto> addEvent(Long userId, NewEventDto body) {
+    public ResponseEntity<EventFullDto> promoterAddEvent(Long userId, NewEventDto body) {
         newEventDtoValidator.requireValid(body);
 
         return new ResponseEntity<>(
@@ -39,8 +39,8 @@ public class UsersApiController implements UsersApi {
     }
 
     @Override
-    public ResponseEntity<EventFullDto> updateEvent(Long userId, Long eventId, UpdateEventPrivateDto body) {
-        updateEventPrivateDtoValidator.requireValid(body);
+    public ResponseEntity<EventFullDto> promoterUpdateEvent(Long userId, Long eventId, UpdateEventUserRequest body) {
+        UpdateEventUserRequestValidator.requireValid(body);
 
         return new ResponseEntity<>(
                 promoterEventService.update(userId, eventId, body),
@@ -49,7 +49,7 @@ public class UsersApiController implements UsersApi {
     }
 
     @Override
-    public ResponseEntity<EventFullDto> getInitiatedEvent(Long userId, Long eventId) {
+    public ResponseEntity<EventFullDto> promoterGetEvent(Long userId, Long eventId) {
         return new ResponseEntity<>(
                 promoterEventService.get(userId, eventId),
                 HttpStatus.OK
@@ -57,7 +57,7 @@ public class UsersApiController implements UsersApi {
     }
 
     @Override
-    public ResponseEntity<List<EventShortDto>> getInitiatedEvents(Long userId, Integer from, Integer size) {
+    public ResponseEntity<List<EventShortDto>> promoterGetEvents(Long userId, Integer from, Integer size) {
         randomAccessPageRequestValidator.requireValid(from, size);
 
         return new ResponseEntity<>(
@@ -67,7 +67,7 @@ public class UsersApiController implements UsersApi {
     }
 
     @Override
-    public ResponseEntity<ParticipationRequestDto> addParticipationRequest(Long userId, Long eventId) {
+    public ResponseEntity<ParticipationRequestDto> participantAddRequest(Long userId, Long eventId) {
         return new ResponseEntity<>(
                 requesterRequestService.add(userId, eventId),
                 HttpStatus.CREATED
@@ -75,7 +75,7 @@ public class UsersApiController implements UsersApi {
     }
 
     @Override
-    public ResponseEntity<ParticipationRequestDto> cancelRequest(Long userId, Long requestId) {
+    public ResponseEntity<ParticipationRequestDto> participantCancelRequest(Long userId, Long requestId) {
         return new ResponseEntity<>(
                 requesterRequestService.cancel(userId, requestId),
                 HttpStatus.OK
@@ -83,7 +83,7 @@ public class UsersApiController implements UsersApi {
     }
 
     @Override
-    public ResponseEntity<EventRequestStatusUpdateResult> changeRequestStatus(Long userId, Long eventId, EventRequestStatusUpdateRequest body) {
+    public ResponseEntity<EventRequestStatusUpdateResult> promoterChangeRequestStatus(Long userId, Long eventId, EventRequestStatusUpdateRequest body) {
         return new ResponseEntity<>(
                 promoterRequestService.changeStatuses(userId, eventId, body),
                 HttpStatus.OK
@@ -91,7 +91,7 @@ public class UsersApiController implements UsersApi {
     }
 
     @Override
-    public ResponseEntity<List<ParticipationRequestDto>> getEventParticipants(Long userId, Long eventId) {
+    public ResponseEntity<List<ParticipationRequestDto>> promoterGetParticipants(Long userId, Long eventId) {
         return new ResponseEntity<>(
                 promoterRequestService.getForEvent(userId, eventId),
                 HttpStatus.OK
@@ -99,7 +99,7 @@ public class UsersApiController implements UsersApi {
     }
 
     @Override
-    public ResponseEntity<List<ParticipationRequestDto>> getUserRequests(Long userId) {
+    public ResponseEntity<List<ParticipationRequestDto>> participantGetRequests(Long userId) {
         return new ResponseEntity<>(
                 requesterRequestService.getRequested(userId),
                 HttpStatus.OK

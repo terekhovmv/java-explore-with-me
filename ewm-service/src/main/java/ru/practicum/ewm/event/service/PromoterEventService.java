@@ -3,14 +3,14 @@ package ru.practicum.ewm.event.service;
 import ru.practicum.ewm.api.dto.EventFullDto;
 import ru.practicum.ewm.api.dto.EventShortDto;
 import ru.practicum.ewm.api.dto.NewEventDto;
-import ru.practicum.ewm.api.dto.UpdateEventPrivateDto;
+import ru.practicum.ewm.api.dto.UpdateEventUserRequest;
 
 import java.util.List;
 
 public interface PromoterEventService {
     EventFullDto add(long callerId, NewEventDto dto);
 
-    EventFullDto update(long callerId, long id, UpdateEventPrivateDto dto);
+    EventFullDto update(long callerId, long id, UpdateEventUserRequest dto);
 
     EventFullDto get(long callerId, long id);
 

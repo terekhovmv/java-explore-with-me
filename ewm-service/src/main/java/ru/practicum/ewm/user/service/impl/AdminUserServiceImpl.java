@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import ru.practicum.ewm.api.dto.NewUserDto;
+import ru.practicum.ewm.api.dto.NewUserRequest;
 import ru.practicum.ewm.api.dto.UserDto;
 import ru.practicum.ewm.pagination.RandomAccessPageRequest;
 import ru.practicum.ewm.user.mapping.UserMapper;
@@ -24,7 +24,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     private final UserMapper mapper;
 
     @Override
-    public UserDto add(NewUserDto dto) {
+    public UserDto add(NewUserRequest dto) {
         User created = repository.save(
                 mapper.transientFromDto(dto)
         );
