@@ -13,7 +13,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class CachedViewsUpdater {
 
-    static private final int POP_LIMIT = 100;
+    private static final int POP_LIMIT = 100;
     private final Set<Long> eventIdsToUpdate = new HashSet<>();
 
     private final StatsProvider statsProvider;
