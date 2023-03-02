@@ -98,9 +98,7 @@ public class CustomEventRepositoryImpl implements CustomEventRepository {
             ));
         }
 
-        if (!predicates.isEmpty()) {
-            query.where(predicates.toArray(new Predicate[0]));
-        }
+        query.where(predicates.toArray(new Predicate[0]));
 
         if (sort == EventSort.VIEWS) {
             Path<Long> eventCachedViews = eventRoot.get("cachedViews");
