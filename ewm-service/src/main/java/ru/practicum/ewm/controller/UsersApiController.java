@@ -10,8 +10,8 @@ import ru.practicum.ewm.api.dto.validation.NewEventDtoValidator;
 import ru.practicum.ewm.api.dto.validation.RandomAccessPageRequestValidator;
 import ru.practicum.ewm.api.dto.validation.UpdateEventUserRequestValidator;
 import ru.practicum.ewm.event.service.PromoterEventService;
-import ru.practicum.ewm.request.service.PromoterRequestService;
 import ru.practicum.ewm.request.service.ParticipantRequestService;
+import ru.practicum.ewm.request.service.PromoterRequestService;
 
 import java.util.List;
 

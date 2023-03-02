@@ -11,6 +11,8 @@ import ru.practicum.ewm.category.repository.CategoryRepository;
 import ru.practicum.ewm.event.mapping.EventMapper;
 import ru.practicum.ewm.event.mapping.EventStateMapper;
 import ru.practicum.ewm.event.model.Event;
+import ru.practicum.ewm.event.model.EventFilter;
+import ru.practicum.ewm.event.model.EventSort;
 import ru.practicum.ewm.event.model.EventState;
 import ru.practicum.ewm.event.repository.EventRepository;
 import ru.practicum.ewm.event.service.AdminEventService;
@@ -93,15 +95,28 @@ public class AdminEventServiceImpl implements AdminEventService {
     }
 
     @Override
-    public List<EventFullDto> find(List<Long> filterUsers, List<EventFullDto.StateEnum> filterStates, List<Long> filterCategories, LocalDateTime filterStart, LocalDateTime filterEnd, int from, int size) {
+    public List<EventFullDto> find(
+            List<Long> filterUsers,
+            List<EventFullDto.StateEnum> filterStates,
+            List<Long> filterCategories,
+            LocalDateTime filterStart,
+            LocalDateTime filterEnd,
+            int from,
+            int size
+    ) {
         List<Event> found = eventRepository.find(
-                filterUsers,
-                (filterStates == null)
-                        ? null
-                        : filterStates.stream().map(eventStateMapper::toState).collect(Collectors.toList()),
-                filterCategories,
-                filterStart,
-                filterEnd,
+                EventFilter.builder()
+                        .initiators(filterUsers)
+                        .states((filterStates == null)
+                                ? null
+                                : filterStates.stream().map(eventStateMapper::toState).collect(Collectors.toList())
+                        )
+                        .categories(filterCategories)
+                        .start(filterStart)
+                        .end(filterEnd)
+                        .onlyAvailable(false)
+                        .build(),
+                EventSort.EVENT_DATE,
                 from,
                 size
         );

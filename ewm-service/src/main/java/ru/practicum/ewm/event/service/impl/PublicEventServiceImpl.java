@@ -6,6 +6,7 @@ import ru.practicum.ewm.api.dto.EventFullDto;
 import ru.practicum.ewm.api.dto.EventShortDto;
 import ru.practicum.ewm.event.mapping.EventMapper;
 import ru.practicum.ewm.event.model.Event;
+import ru.practicum.ewm.event.model.EventFilter;
 import ru.practicum.ewm.event.model.EventSort;
 import ru.practicum.ewm.event.repository.EventRepository;
 import ru.practicum.ewm.event.service.PublicEventService;
@@ -53,12 +54,14 @@ public class PublicEventServiceImpl implements PublicEventService {
             int size
     ) {
         List<Event> found = eventRepository.find(
-                filterText,
-                filterCategories,
-                filterPaid,
-                filterStart,
-                filterEnd,
-                filterOnlyAvailable,
+                EventFilter.builder()
+                        .text(filterText)
+                        .categories(filterCategories)
+                        .paid(filterPaid)
+                        .start(filterStart)
+                        .end(filterEnd)
+                        .onlyAvailable(filterOnlyAvailable)
+                        .build(),
                 sort,
                 from,
                 size
