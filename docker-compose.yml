@@ -1,7 +1,7 @@
 version: '3.1'
 services:
-  stats-service:
-    container_name: stats-service
+  stats-server:
+    container_name: stats-server
     build: ./stats-service
     ports:
       - "9090:9090"
@@ -23,16 +23,16 @@ services:
       POSTGRES_PASSWORD: stats-db-pwd
       TZ: "Europe/Moscow"
 
-  ewm-service:
-    container_name: ewm-service
+  ewm-server:
+    container_name: ewm-server
     build: ./ewm-service
     ports:
       - "8080:8080"
     depends_on:
-      - stats-service
+      - stats-server
       - ewm-db
     environment:
-      STATS_SERVICE_URL: http://stats-service:9090
+      STATS_SERVICE_URL: http://stats-server:9090
       EWM_DB_URL: jdbc:postgresql://ewm-db:5432/ewm-db
       EWM_DB_USERNAME: ewm-db-user
       EWM_DB_PASSWORD: ewm-db-pwd
