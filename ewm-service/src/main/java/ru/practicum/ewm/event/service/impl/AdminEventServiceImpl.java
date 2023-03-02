@@ -14,7 +14,7 @@ import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.event.model.EventState;
 import ru.practicum.ewm.event.repository.EventRepository;
 import ru.practicum.ewm.event.service.AdminEventService;
-import ru.practicum.ewm.exception.ForbiddenException;
+import ru.practicum.ewm.exception.ConflictException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,9 +25,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AdminEventServiceImpl implements AdminEventService {
 
+    private static final int PUBLISHING_DEADLINE_HOURS = 1;
     private final CategoryRepository categoryRepository;
     private final EventRepository eventRepository;
-
     private final EventMapper eventMapper;
     private final DateTimeMapper dateTimeMapper;
     private final EventStateMapper eventStateMapper;
@@ -50,7 +50,11 @@ public class AdminEventServiceImpl implements AdminEventService {
             toUpdate.setDescription(dto.getDescription());
         }
         if (dto.getEventDate() != null) {
-            toUpdate.setEventDate(dateTimeMapper.stringToDateTime(dto.getEventDate()));
+            LocalDateTime newEventDate = dateTimeMapper.stringToDateTime(dto.getEventDate());
+            if (!newEventDate.isAfter(LocalDateTime.now())) {
+                throw new ConflictException("New event date is not acceptable");
+            }
+            toUpdate.setEventDate(newEventDate);
         }
         if (dto.getLocation() != null) {
             toUpdate.setLocationLat(dto.getLocation().getLat());
@@ -67,10 +71,15 @@ public class AdminEventServiceImpl implements AdminEventService {
         }
         if (dto.getStateAction() != null) {
             if (toUpdate.getState() != EventState.PENDING) {
-                throw new ForbiddenException("The event is not in PENDING state");
+                throw new ConflictException("The event is not in PENDING state");
             }
 
             if (dto.getStateAction() == UpdateEventAdminDto.StateActionEnum.PUBLISH_EVENT) {
+                if (!toUpdate.getEventDate().minusHours(PUBLISHING_DEADLINE_HOURS)
+                        .isAfter(LocalDateTime.now())
+                ) {
+                    throw new ConflictException("Too late to publish the event");
+                }
                 toUpdate.setState(EventState.PUBLISHED);
             } else {
                 toUpdate.setState(EventState.CANCELED);
