@@ -5,6 +5,7 @@ import ru.practicum.ewm.event.model.EventFilter;
 import ru.practicum.ewm.event.model.EventSort;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CustomEventRepository {
     List<Event> find(
@@ -13,4 +14,6 @@ public interface CustomEventRepository {
             int from,
             int size
     );
+
+    void updateCachedViews(Map<Long, Long> viewsByIds);
 }

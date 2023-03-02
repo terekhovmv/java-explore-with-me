@@ -10,10 +10,12 @@ import ru.practicum.ewm.event.model.EventState;
 import ru.practicum.ewm.event.repository.CustomEventRepository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.criteria.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository
@@ -112,5 +114,23 @@ public class CustomEventRepositoryImpl implements CustomEventRepository {
                 .setMaxResults(size)
                 .getResultStream()
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateCachedViews(Map<Long, Long> viewsByIds) {
+        if (viewsByIds.isEmpty()) {
+            return;
+        }
+
+        StringBuilder sb = new StringBuilder("UPDATE events SET cached_views = CASE \n");
+        for (Map.Entry<Long, Long> entry : viewsByIds.entrySet()) {
+            sb.append(String.format("WHEN id = %d THEN %d \n", entry.getKey(), entry.getValue()));
+        }
+        sb.append("ELSE cached_views END \n");
+        sb.append("WHERE id IN :ids");
+
+        Query q = em.createNativeQuery(sb.toString());
+        q.setParameter("ids", new ArrayList<>(viewsByIds.keySet()));
+        q.executeUpdate();
     }
 }

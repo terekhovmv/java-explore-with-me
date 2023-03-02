@@ -2,8 +2,10 @@ package ru.practicum.ewm.event.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.api.dto.EventFullDto;
 import ru.practicum.ewm.api.dto.EventShortDto;
+import ru.practicum.ewm.event.cache.CachedViewsUpdater;
 import ru.practicum.ewm.event.mapping.EventMapper;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.event.model.EventFilter;
@@ -11,7 +13,6 @@ import ru.practicum.ewm.event.model.EventSort;
 import ru.practicum.ewm.event.repository.EventRepository;
 import ru.practicum.ewm.event.service.PublicEventService;
 import ru.practicum.ewm.exception.NotFoundException;
-import ru.practicum.stats.client.StatsProvider;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,18 +26,17 @@ public class PublicEventServiceImpl implements PublicEventService {
 
     private final EventMapper eventMapper;
 
-    private final StatsProvider statsProvider;
+    private final CachedViewsUpdater cachedViewsUpdater;
 
     @Override
+    @Transactional
     public EventFullDto get(long id) {
         Event found = eventRepository
                 .findPublishedById(id)
                 .orElseThrow(
                         () -> new NotFoundException(String.format("Event with id=%d was not found", id))
                 );
-
-        EventStats stats = new EventStats(statsProvider, found);
-        eventRepository.save(stats.updateCachedViews(found));
+        cachedViewsUpdater.scheduleCachedViewsUpdating(id);
 
         return eventMapper.toDto(found);
     }
