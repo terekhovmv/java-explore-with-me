@@ -26,8 +26,8 @@ public class AdminApiController implements AdminApi {
 
     private final NewCategoryDtoValidator newCategoryDtoValidator;
     private final UpdateCategoryDtoValidator updateCategoryDtoValidator;
-    private final NewUserRequestValidator NewUserRequestValidator;
-    private final UpdateEventAdminRequestValidator UpdateEventAdminRequestValidator;
+    private final NewUserRequestValidator newUserRequestValidator;
+    private final UpdateEventAdminRequestValidator updateEventAdminRequestValidator;
     private final StringDateTimeValidator stringDateTimeValidator;
     private final StringStateEnumValidator stringStateEnumValidator;
     private final RandomAccessPageRequestValidator randomAccessPageRequestValidator;
@@ -60,7 +60,7 @@ public class AdminApiController implements AdminApi {
 
     @Override
     public ResponseEntity<UserDto> adminAddUser(NewUserRequest body) {
-        NewUserRequestValidator.requireValid(body);
+        newUserRequestValidator.requireValid(body);
 
         return new ResponseEntity<>(
                 adminUserService.add(body),
@@ -113,7 +113,7 @@ public class AdminApiController implements AdminApi {
 
     @Override
     public ResponseEntity<EventFullDto> adminUpdateEvent(Long eventId, UpdateEventAdminRequest body) {
-        UpdateEventAdminRequestValidator.requireValid(body);
+        updateEventAdminRequestValidator.requireValid(body);
 
         return new ResponseEntity<>(
                 adminEventService.update(eventId, body),

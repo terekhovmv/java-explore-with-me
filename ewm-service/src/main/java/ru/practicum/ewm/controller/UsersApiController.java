@@ -26,7 +26,7 @@ public class UsersApiController implements UsersApi {
 
     private final NewEventDtoValidator newEventDtoValidator;
     private final RandomAccessPageRequestValidator randomAccessPageRequestValidator;
-    private final UpdateEventUserRequestValidator UpdateEventUserRequestValidator;
+    private final UpdateEventUserRequestValidator updateEventUserRequestValidator;
 
     @Override
     public ResponseEntity<EventFullDto> promoterAddEvent(Long userId, NewEventDto body) {
@@ -40,7 +40,7 @@ public class UsersApiController implements UsersApi {
 
     @Override
     public ResponseEntity<EventFullDto> promoterUpdateEvent(Long userId, Long eventId, UpdateEventUserRequest body) {
-        UpdateEventUserRequestValidator.requireValid(body);
+        updateEventUserRequestValidator.requireValid(body);
 
         return new ResponseEntity<>(
                 promoterEventService.update(userId, eventId, body),
