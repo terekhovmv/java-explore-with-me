@@ -12,7 +12,7 @@ import ru.practicum.ewm.request.mapping.RequestMapper;
 import ru.practicum.ewm.request.model.Request;
 import ru.practicum.ewm.request.model.RequestStatus;
 import ru.practicum.ewm.request.repository.RequestRepository;
-import ru.practicum.ewm.request.service.RequesterRequestService;
+import ru.practicum.ewm.request.service.ParticipantRequestService;
 import ru.practicum.ewm.user.model.User;
 import ru.practicum.ewm.user.repository.UserRepository;
 
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RequesterRequestServiceImpl implements RequesterRequestService {
+public class ParticipantRequestServiceImpl implements ParticipantRequestService {
 
     private final UserRepository userRepository;
 

@@ -11,7 +11,7 @@ import ru.practicum.ewm.api.dto.validation.RandomAccessPageRequestValidator;
 import ru.practicum.ewm.api.dto.validation.UpdateEventUserRequestValidator;
 import ru.practicum.ewm.event.service.PromoterEventService;
 import ru.practicum.ewm.request.service.PromoterRequestService;
-import ru.practicum.ewm.request.service.RequesterRequestService;
+import ru.practicum.ewm.request.service.ParticipantRequestService;
 
 import java.util.List;
 
@@ -22,7 +22,7 @@ public class UsersApiController implements UsersApi {
     private final PromoterEventService promoterEventService;
     private final PromoterRequestService promoterRequestService;
 
-    private final RequesterRequestService requesterRequestService;
+    private final ParticipantRequestService participantRequestService;
 
     private final NewEventDtoValidator newEventDtoValidator;
     private final RandomAccessPageRequestValidator randomAccessPageRequestValidator;
@@ -69,7 +69,7 @@ public class UsersApiController implements UsersApi {
     @Override
     public ResponseEntity<ParticipationRequestDto> participantAddRequest(Long userId, Long eventId) {
         return new ResponseEntity<>(
-                requesterRequestService.add(userId, eventId),
+                participantRequestService.add(userId, eventId),
                 HttpStatus.CREATED
         );
     }
@@ -77,7 +77,7 @@ public class UsersApiController implements UsersApi {
     @Override
     public ResponseEntity<ParticipationRequestDto> participantCancelRequest(Long userId, Long requestId) {
         return new ResponseEntity<>(
-                requesterRequestService.cancel(userId, requestId),
+                participantRequestService.cancel(userId, requestId),
                 HttpStatus.OK
         );
     }
@@ -101,7 +101,7 @@ public class UsersApiController implements UsersApi {
     @Override
     public ResponseEntity<List<ParticipationRequestDto>> participantGetRequests(Long userId) {
         return new ResponseEntity<>(
-                requesterRequestService.getRequested(userId),
+                participantRequestService.getRequested(userId),
                 HttpStatus.OK
         );
     }
