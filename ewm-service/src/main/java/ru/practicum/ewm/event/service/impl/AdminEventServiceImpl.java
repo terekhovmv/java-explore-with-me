@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.ewm.api.dto.EventFullDto;
+import ru.practicum.ewm.api.dto.Location;
 import ru.practicum.ewm.api.dto.UpdateEventAdminRequest;
 import ru.practicum.ewm.api.dto.mapping.DateTimeMapper;
 import ru.practicum.ewm.category.model.Category;
@@ -22,6 +23,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ru.practicum.ewm.utls.ValueApplier.applyNotNull;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -38,55 +41,18 @@ public class AdminEventServiceImpl implements AdminEventService {
     public EventFullDto update(long id, UpdateEventAdminRequest dto) {
         Event toUpdate = eventRepository.require(id);
 
-        if (dto.getCategory() != null) {
-            Category category = categoryRepository.require(dto.getCategory());
-            toUpdate.setCategory(category);
-        }
-        if (dto.getTitle() != null) {
-            toUpdate.setTitle(dto.getTitle());
-        }
-        if (dto.getAnnotation() != null) {
-            toUpdate.setAnnotation(dto.getAnnotation());
-        }
-        if (dto.getDescription() != null) {
-            toUpdate.setDescription(dto.getDescription());
-        }
-        if (dto.getEventDate() != null) {
-            LocalDateTime newEventDate = dateTimeMapper.stringToDateTime(dto.getEventDate());
-            if (!newEventDate.isAfter(LocalDateTime.now())) {
-                throw new ConflictException("New event date is not acceptable");
-            }
-            toUpdate.setEventDate(newEventDate);
-        }
-        if (dto.getLocation() != null) {
-            toUpdate.setLocationLat(dto.getLocation().getLat());
-            toUpdate.setLocationLon(dto.getLocation().getLon());
-        }
-        if (dto.isPaid() != null) {
-            toUpdate.setPaid(dto.isPaid());
-        }
-        if (dto.getParticipantLimit() != null) {
-            toUpdate.setParticipantLimit((long) dto.getParticipantLimit());
-        }
-        if (dto.isRequestModeration() != null) {
-            toUpdate.setRequestModeration(dto.isRequestModeration());
-        }
-        if (dto.getStateAction() != null) {
-            if (toUpdate.getState() != EventState.PENDING) {
-                throw new ConflictException("The event is not in PENDING state");
-            }
+        applyNotNull(toUpdate::setTitle, dto.getTitle());
+        applyNotNull(toUpdate::setAnnotation, dto.getAnnotation());
+        applyNotNull(toUpdate::setDescription, dto.getDescription());
+        applyNotNull(toUpdate::setPaid, dto.isPaid());
+        applyNotNull(toUpdate::setRequestModeration, dto.isRequestModeration());
 
-            if (dto.getStateAction() == UpdateEventAdminRequest.StateActionEnum.PUBLISH_EVENT) {
-                if (!toUpdate.getEventDate().minusHours(PUBLISHING_DEADLINE_HOURS)
-                        .isAfter(LocalDateTime.now())
-                ) {
-                    throw new ConflictException("Too late to publish the event");
-                }
-                toUpdate.setState(EventState.PUBLISHED);
-            } else {
-                toUpdate.setState(EventState.CANCELED);
-            }
-        }
+        applyNotNull(this::updateCategory, toUpdate, dto.getCategory());
+        applyNotNull(this::updateEventDate, toUpdate, dto.getEventDate());
+        applyNotNull(this::updateLocation, toUpdate, dto.getLocation());
+        applyNotNull(this::updateParticipantLimit, toUpdate, dto.getParticipantLimit());
+
+        applyNotNull(this::applyStateAction, toUpdate, dto.getStateAction());
 
         Event updated = eventRepository.save(toUpdate);
         log.info("Event #'{}' was successfully updated", id);
@@ -125,5 +91,46 @@ public class AdminEventServiceImpl implements AdminEventService {
                 .stream()
                 .map(eventMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    private void updateCategory(Event toUpdate, Long categoryId) {
+        Category category = categoryRepository.require(categoryId);
+        toUpdate.setCategory(category);
+    }
+
+    private void updateEventDate(Event toUpdate, String stringEventDate) {
+        LocalDateTime newEventDate = dateTimeMapper.stringToDateTime(stringEventDate);
+        if (!newEventDate.isAfter(LocalDateTime.now())) {
+            throw new ConflictException("New event date is not acceptable");
+        }
+        toUpdate.setEventDate(newEventDate);
+    }
+
+    private void updateLocation(Event toUpdate, Location location) {
+        toUpdate.setLocationLat(location.getLat());
+        toUpdate.setLocationLon(location.getLon());
+    }
+
+    private void updateParticipantLimit(Event toUpdate, Integer participantLimit) {
+        toUpdate.setParticipantLimit(participantLimit.longValue());
+    }
+
+    private void applyStateAction(Event toUpdate, UpdateEventAdminRequest.StateActionEnum stateAction) {
+        if (toUpdate.getState() != EventState.PENDING) {
+            throw new ConflictException("The event is not in PENDING state");
+        }
+
+        if (stateAction == UpdateEventAdminRequest.StateActionEnum.REJECT_EVENT) {
+            toUpdate.setState(EventState.CANCELED);
+            return;
+        }
+
+        assert stateAction == UpdateEventAdminRequest.StateActionEnum.PUBLISH_EVENT;
+        if (!toUpdate.getEventDate().minusHours(PUBLISHING_DEADLINE_HOURS)
+                .isAfter(LocalDateTime.now())
+        ) {
+            throw new ConflictException("Too late to publish the event");
+        }
+        toUpdate.setState(EventState.PUBLISHED);
     }
 }
