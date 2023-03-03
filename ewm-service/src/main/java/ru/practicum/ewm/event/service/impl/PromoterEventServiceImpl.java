@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import ru.practicum.ewm.api.dto.EventFullDto;
-import ru.practicum.ewm.api.dto.EventShortDto;
-import ru.practicum.ewm.api.dto.NewEventDto;
-import ru.practicum.ewm.api.dto.UpdateEventUserRequest;
+import ru.practicum.ewm.api.dto.*;
 import ru.practicum.ewm.api.dto.mapping.DateTimeMapper;
 import ru.practicum.ewm.category.model.Category;
 import ru.practicum.ewm.category.repository.CategoryRepository;
@@ -24,6 +21,8 @@ import ru.practicum.ewm.user.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static ru.practicum.ewm.utls.ValueApplier.applyNotNull;
 
 @Slf4j
 @Service
@@ -63,52 +62,19 @@ public class PromoterEventServiceImpl implements PromoterEventService {
         if (toUpdate.getState() == EventState.PUBLISHED) {
             throw new ConflictException("Unable to change already published event");
         }
-        if (dto.getCategory() != null) {
-            Category category = categoryRepository.require(dto.getCategory());
-            toUpdate.setCategory(category);
-        }
-        if (dto.getTitle() != null) {
-            toUpdate.setTitle(dto.getTitle());
-        }
-        if (dto.getAnnotation() != null) {
-            toUpdate.setAnnotation(dto.getAnnotation());
-        }
-        if (dto.getDescription() != null) {
-            toUpdate.setDescription(dto.getDescription());
-        }
-        if (dto.getEventDate() != null) {
-            LocalDateTime newEventDate = dateTimeMapper.stringToDateTime(dto.getEventDate());
-            if (!newEventDate.minusHours(PROMOTING_DEADLINE_HOURS)
-                    .isAfter(LocalDateTime.now())
-            ) {
-                throw new ConflictException("Too late to update event date");
-            }
-            toUpdate.setEventDate(newEventDate);
-        }
-        if (dto.getLocation() != null) {
-            toUpdate.setLocationLat(dto.getLocation().getLat());
-            toUpdate.setLocationLon(dto.getLocation().getLon());
-        }
-        if (dto.isPaid() != null) {
-            toUpdate.setPaid(dto.isPaid());
-        }
-        if (dto.getParticipantLimit() != null) {
-            toUpdate.setParticipantLimit((long) dto.getParticipantLimit());
-        }
-        if (dto.isRequestModeration() != null) {
-            toUpdate.setRequestModeration(dto.isRequestModeration());
-        }
-        if (dto.getStateAction() != null) {
-            if (toUpdate.getState() == EventState.PENDING
-                    && dto.getStateAction() == UpdateEventUserRequest.StateActionEnum.CANCEL_REVIEW
-            ) {
-                toUpdate.setState(EventState.CANCELED);
-            } else if (toUpdate.getState() == EventState.CANCELED
-                    && dto.getStateAction() == UpdateEventUserRequest.StateActionEnum.SEND_TO_REVIEW
-            ) {
-                toUpdate.setState(EventState.PENDING);
-            }
-        }
+
+        applyNotNull(toUpdate::setTitle, dto.getTitle());
+        applyNotNull(toUpdate::setAnnotation, dto.getAnnotation());
+        applyNotNull(toUpdate::setDescription, dto.getDescription());
+        applyNotNull(toUpdate::setPaid, dto.isPaid());
+        applyNotNull(toUpdate::setRequestModeration, dto.isRequestModeration());
+
+        applyNotNull(this::updateCategory, toUpdate, dto.getCategory());
+        applyNotNull(this::updateEventDate, toUpdate, dto.getEventDate());
+        applyNotNull(this::updateLocation, toUpdate, dto.getLocation());
+        applyNotNull(this::updateParticipantLimit, toUpdate, dto.getParticipantLimit());
+
+        applyNotNull(this::applyStateAction, toUpdate, dto.getStateAction());
 
         Event updated = eventRepository.save(toUpdate);
         log.info("Event #'{}' was successfully updated", id);
@@ -140,5 +106,43 @@ public class PromoterEventServiceImpl implements PromoterEventService {
                 .stream()
                 .map(eventMapper::toShortDto)
                 .collect(Collectors.toList());
+    }
+
+    private void updateCategory(Event toUpdate, Long categoryId) {
+        Category category = categoryRepository.require(categoryId);
+        toUpdate.setCategory(category);
+    }
+
+    private void updateEventDate(Event toUpdate, String stringEventDate) {
+        LocalDateTime newEventDate = dateTimeMapper.stringToDateTime(stringEventDate);
+        if (!newEventDate.minusHours(PROMOTING_DEADLINE_HOURS)
+                .isAfter(LocalDateTime.now())
+        ) {
+            throw new ConflictException("Too late to update event date");
+        }
+        toUpdate.setEventDate(newEventDate);
+    }
+
+    private void updateLocation(Event toUpdate, Location location) {
+        toUpdate.setLocationLat(location.getLat());
+        toUpdate.setLocationLon(location.getLon());
+    }
+
+    private void updateParticipantLimit(Event toUpdate, Integer participantLimit) {
+        toUpdate.setParticipantLimit(participantLimit.longValue());
+    }
+
+    private void applyStateAction(Event toUpdate, UpdateEventUserRequest.StateActionEnum stateAction) {
+        final EventState state = toUpdate.getState();
+
+        if (state == EventState.PENDING
+                && stateAction == UpdateEventUserRequest.StateActionEnum.CANCEL_REVIEW
+        ) {
+            toUpdate.setState(EventState.CANCELED);
+        } else if (state == EventState.CANCELED
+                && stateAction == UpdateEventUserRequest.StateActionEnum.SEND_TO_REVIEW
+        ) {
+            toUpdate.setState(EventState.PENDING);
+        }
     }
 }
