@@ -10,6 +10,7 @@ import ru.practicum.ewm.event.mapping.EventMapper;
 import ru.practicum.ewm.event.model.Event;
 import ru.practicum.ewm.event.model.EventFilter;
 import ru.practicum.ewm.event.model.EventSort;
+import ru.practicum.ewm.event.model.EventState;
 import ru.practicum.ewm.event.repository.EventRepository;
 import ru.practicum.ewm.event.service.PublicEventService;
 import ru.practicum.ewm.exception.NotFoundException;
@@ -55,6 +56,7 @@ public class PublicEventServiceImpl implements PublicEventService {
     ) {
         List<Event> found = eventRepository.find(
                 EventFilter.builder()
+                        .states(List.of(EventState.PUBLISHED))
                         .text(filterText)
                         .categories(filterCategories)
                         .paid(filterPaid)
