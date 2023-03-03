@@ -61,7 +61,6 @@ public class PromoterRequestServiceImpl implements PromoterRequestService {
                 throw new ConflictException(String.format("Request #%d is not in pending state", request.getId()));
             }
         });
-        List<Long> requestIds = requests.stream().map(Request::getId).collect(Collectors.toList());
 
         EventRequestStatusUpdateResult result = new EventRequestStatusUpdateResult();
         if (dto.getStatus() == EventRequestStatusUpdateRequest.StatusEnum.CONFIRMED) {
