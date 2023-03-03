@@ -31,7 +31,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
     public void remove(long id) {
         repository.require(id);
         repository.deleteById(id);
-        log.info("Category #'{}' was successfully removed", id);
+        log.info("Category #{} was successfully removed", id);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class AdminCategoryServiceImpl implements AdminCategoryService {
         mapper.updateFromDto(toUpdate, dto);
 
         Category updated = repository.save(toUpdate);
-        log.info("Category #'{}' was successfully updated", id);
+        log.info("Category #{} was successfully updated", id);
         return mapper.toDto(updated);
     }
 }

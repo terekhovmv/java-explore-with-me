@@ -36,7 +36,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     public void remove(long id) {
         repository.require(id);
         repository.deleteById(id);
-        log.info("User #'{}' was successfully removed", id);
+        log.info("User #{} was successfully removed", id);
     }
 
     @Override

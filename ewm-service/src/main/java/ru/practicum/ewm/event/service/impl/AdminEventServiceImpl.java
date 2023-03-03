@@ -55,7 +55,7 @@ public class AdminEventServiceImpl implements AdminEventService {
         applyNotNull(this::applyStateAction, toUpdate, dto.getStateAction());
 
         Event updated = eventRepository.save(toUpdate);
-        log.info("Event #'{}' was successfully updated", id);
+        log.info("Event #{} was successfully updated", id);
 
         return eventMapper.toDto(updated);
     }
