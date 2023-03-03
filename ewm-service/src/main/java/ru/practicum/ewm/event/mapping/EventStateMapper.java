@@ -3,6 +3,7 @@ package ru.practicum.ewm.event.mapping;
 import org.springframework.stereotype.Component;
 import ru.practicum.ewm.api.dto.EventFullDto;
 import ru.practicum.ewm.event.model.EventState;
+import ru.practicum.ewm.exception.MappingException;
 
 @Component
 public class EventStateMapper {
@@ -15,7 +16,7 @@ public class EventStateMapper {
             case CANCELED:
                 return EventFullDto.StateEnum.CANCELED;
             default:
-                throw new RuntimeException("Unexpected DTO state: " + from);
+                throw new MappingException("Unexpected DTO state: " + from);
         }
     }
 
@@ -28,7 +29,7 @@ public class EventStateMapper {
             case CANCELED:
                 return EventState.CANCELED;
             default:
-                throw new RuntimeException("Unexpected state: " + from);
+                throw new MappingException("Unexpected state: " + from);
         }
     }
 }
