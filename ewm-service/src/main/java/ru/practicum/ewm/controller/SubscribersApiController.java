@@ -25,8 +25,8 @@ public class SubscribersApiController implements SubscribersApi {
 
     @Override
     public ResponseEntity<Void> subscriberAddSubscription(Long subscriberId, Long promoterId) {
-        service.add(subscriberId, promoterId);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        boolean added = service.add(subscriberId, promoterId);
+        return new ResponseEntity<>(added ? HttpStatus.CREATED : HttpStatus.NO_CONTENT);
     }
 
     @Override
