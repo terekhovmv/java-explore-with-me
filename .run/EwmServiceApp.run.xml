@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="EwmServiceApp" type="SpringBootApplicationConfigurationType"
+                   factoryName="Spring Boot">
+        <envs>
+            <env name="EWM_DB_PASSWORD" value="ewm-db-pwd"/>
+            <env name="EWM_DB_URL" value="jdbc:postgresql://localhost:5432/ewm-db"/>
+            <env name="EWM_DB_USERNAME" value="ewm-db-user"/>
+            <env name="STATS_SERVICE_URL" value="http://localhost:9090"/>
+        </envs>
+        <module name="ewm-service"/>
+        <option name="SPRING_BOOT_MAIN_CLASS" value="ru.practicum.ewm.EwmServiceApp"/>
+        <method v="2">
+            <option name="Make" enabled="true"/>
+        </method>
+    </configuration>
+</component>

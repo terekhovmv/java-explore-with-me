@@ -2,24 +2,28 @@
 
 ## Components
 
-### `ewm-server`
+### `ewm-service`
 
-*Depends on:* `stats-client`
+*Depends on:* `ewm-service-contract`, `stats-client`
 
 Main API of Explore-with-me application.
 
-### `stats-server`
+### `ewm-service-contract`
+
+Explore-with-me service contract built on Swagger specs.
+
+### `stats-service`
 
 *Depends on:* `stats-dto`
 
-Statistics server for collecting the information about APIs called. Can be used in any other environments.
+Statistics service for collecting the information about APIs called. Can be used in any other environments.
 
 ### `stats-client`
 
 *Depends on:* `stats-dto`
 
-The module for embedding into the app for sending the information to statistics server (non blocking).
+The module for embedding into the app for sending the information to statistics service (non blocking).
 
 ### `stats-dto`
 
-Common statistics module used both on server and client sides.
+Common statistics module used both on service and client sides.
