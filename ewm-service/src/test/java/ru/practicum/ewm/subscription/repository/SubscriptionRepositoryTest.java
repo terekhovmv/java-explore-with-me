@@ -13,6 +13,7 @@ import ru.practicum.ewm.user.repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -59,23 +60,23 @@ public class SubscriptionRepositoryTest {
 
     @Test
     void getSubscribed() {
-        final int WINDOW_SIZE = 10;
-        final int TOTAL_SIZE = WINDOW_SIZE * 5;
+        final int windowSize = 10;
+        final int totalSize = windowSize * 5;
 
-        User subscriber = addUser(TOTAL_SIZE);
+        User subscriber = addUser(totalSize);
         List<User> subscribed = new ArrayList<>();
-        for (int i = 0; i < TOTAL_SIZE; i++) {
+        for (int i = 0; i < totalSize; i++) {
             User user = addUser(i);
             subscribed.add(user);
             addSubscription(subscriber, user);
         }
-        addUser(TOTAL_SIZE + 1);
+        addUser(totalSize + 1);
 
 
         BiConsumer<Integer, Integer> tester = (from, expectedSize) -> {
             List<User> result = testee.getSubscribed(
                     subscriber.getId(),
-                    RandomAccessPageRequest.of(from, WINDOW_SIZE, Sort.unsorted())
+                    RandomAccessPageRequest.of(from, windowSize, Sort.unsorted())
             ).getContent();
 
             assertIterableEquals(
@@ -84,26 +85,60 @@ public class SubscriptionRepositoryTest {
             );
         };
 
-        tester.accept(0, WINDOW_SIZE);
-        tester.accept(TOTAL_SIZE / 2, WINDOW_SIZE);
-        tester.accept(TOTAL_SIZE - WINDOW_SIZE / 2, WINDOW_SIZE / 2);
+        tester.accept(0, windowSize);
+        tester.accept(totalSize / 2, windowSize);
+        tester.accept(totalSize - windowSize / 2, windowSize / 2);
     }
 
     @Test
     void getSubscribedEmptyList() {
-        final int TOTAL_SIZE = 100;
+        final int totalSize = 10;
 
-        User subscriber = addUser(TOTAL_SIZE);
-        for (int i = 0; i < TOTAL_SIZE; i++) {
+        User subscriber = addUser(totalSize);
+        for (int i = 0; i < totalSize; i++) {
             addUser(i);
         }
 
         List<User> result = testee.getSubscribed(
                 subscriber.getId(),
-                RandomAccessPageRequest.of(0, TOTAL_SIZE * 2, Sort.unsorted())
+                RandomAccessPageRequest.of(0, totalSize * 2, Sort.unsorted())
         ).getContent();
 
         assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void getSubscribedIds() {
+        final int totalSize = 10;
+
+        User subscriber = addUser(totalSize);
+        List<User> subscribed = new ArrayList<>();
+        for (int i = 0; i < totalSize; i++) {
+            User user = addUser(i);
+            subscribed.add(user);
+            addSubscription(subscriber, user);
+        }
+        addUser(totalSize + 1);
+
+
+        List<Long> actual = testee.getSubscribedIds(
+                subscriber.getId()
+        );
+        List<Long> expected = subscribed.stream().map(User::getId).collect(Collectors.toList());
+
+        assertIterableEquals(expected, actual);
+    }
+
+    @Test
+    void getSubscribedIdsEmptyList() {
+        final int totalSize = 10;
+
+        User subscriber = addUser(totalSize);
+        for (int i = 0; i < totalSize; i++) {
+            addUser(i);
+        }
+
+        assertTrue(testee.getSubscribedIds(subscriber.getId()).isEmpty());
     }
 
     private User addUser(long idx) {
