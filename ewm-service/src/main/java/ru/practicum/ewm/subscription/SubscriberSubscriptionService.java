@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface SubscriberSubscriptionService {
 
-    void add(long subscriberId, long promoterId);
+    boolean add(long subscriberId, long promoterId);
 
     void remove(long subscriberId, long promoterId);
 
