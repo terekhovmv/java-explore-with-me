@@ -6,7 +6,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.ewm.api.dto.EventShortDto;
 import ru.practicum.ewm.api.dto.UserShortDto;
+import ru.practicum.ewm.event.mapping.EventMapper;
+import ru.practicum.ewm.event.model.Event;
+import ru.practicum.ewm.event.model.EventFilter;
 import ru.practicum.ewm.event.model.EventSort;
+import ru.practicum.ewm.event.model.EventState;
+import ru.practicum.ewm.event.repository.EventRepository;
 import ru.practicum.ewm.pagination.RandomAccessPageRequest;
 import ru.practicum.ewm.subscription.SubscriberSubscriptionService;
 import ru.practicum.ewm.subscription.model.Subscription;
@@ -26,7 +31,11 @@ public class SubscriberSubscriptionServiceImpl implements SubscriberSubscription
     private final UserRepository userRepository;
     private final SubscriptionRepository subscriptionRepository;
 
+    private final EventRepository eventRepository;
+
     private final UserMapper userMapper;
+
+    private final EventMapper eventMapper;
 
     @Override
     public boolean add(long subscriberId, long promoterId) {
@@ -99,6 +108,29 @@ public class SubscriberSubscriptionServiceImpl implements SubscriberSubscription
             int from,
             int size
     ) {
-        throw new UnsupportedOperationException();
+        userRepository.require(subscriberId);
+        List<Long> users = subscriptionRepository.getSubscribedIds(subscriberId);
+        if (users.isEmpty()) {
+            return List.of();
+        }
+
+        List<Event> found = eventRepository.find(
+                EventFilter.builder()
+                        .states(List.of(EventState.PUBLISHED))
+                        .text(filterText)
+                        .categories(filterCategories)
+                        .initiators(users)
+                        .paid(filterPaid)
+                        .onlyAvailable(filterOnlyAvailable)
+                        .build(),
+                sort,
+                from,
+                size
+        );
+
+        return found
+                .stream()
+                .map(eventMapper::toShortDto)
+                .collect(Collectors.toList());
     }
 }
