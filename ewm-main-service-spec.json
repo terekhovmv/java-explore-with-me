@@ -1975,7 +1975,7 @@
         ]
       }
     },
-    "/subscribers/{subscriberId}/subscriptions/{promoterId}": {
+    "/users/{userId}/subscriptions/{promoterId}": {
       "post": {
         "tags": [
           "Private: Subscriptions"
@@ -1986,7 +1986,7 @@
           {
             "description": "subscriber id",
             "in": "path",
-            "name": "subscriberId",
+            "name": "userId",
             "required": true,
             "schema": {
               "type": "integer",
@@ -2043,7 +2043,7 @@
           {
             "description": "subscriber id",
             "in": "path",
-            "name": "subscriberId",
+            "name": "userId",
             "required": true,
             "schema": {
               "type": "integer",
@@ -2078,7 +2078,7 @@
         }
       }
     },
-    "/subscribers/{subscriberId}/subscriptions": {
+    "/users/{userId}/subscriptions": {
       "get": {
         "tags": [
           "Private: Subscriptions"
@@ -2089,7 +2089,7 @@
           {
             "description": "subscriber id",
             "in": "path",
-            "name": "subscriberId",
+            "name": "userId",
             "required": true,
             "schema": {
               "type": "integer",
@@ -2156,7 +2156,7 @@
         }
       }
     },
-    "/subscribers/{subscriberId}/feed": {
+    "/users/{userId}/feed": {
       "get": {
         "tags": [
           "Private: Subscriptions"
@@ -2167,7 +2167,7 @@
           {
             "description": "subscriber id",
             "in": "path",
-            "name": "subscriberId",
+            "name": "userId",
             "required": true,
             "schema": {
               "type": "integer",
