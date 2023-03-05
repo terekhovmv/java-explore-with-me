@@ -12,6 +12,7 @@ import ru.practicum.ewm.event.model.EventFilter;
 import ru.practicum.ewm.event.model.EventSort;
 import ru.practicum.ewm.event.model.EventState;
 import ru.practicum.ewm.event.repository.EventRepository;
+import ru.practicum.ewm.exception.ConflictException;
 import ru.practicum.ewm.pagination.RandomAccessPageRequest;
 import ru.practicum.ewm.subscription.SubscriberSubscriptionService;
 import ru.practicum.ewm.subscription.model.Subscription;
@@ -40,7 +41,11 @@ public class SubscriberSubscriptionServiceImpl implements SubscriberSubscription
     @Override
     public boolean add(long subscriberId, long promoterId) {
         User subscriber = userRepository.require(subscriberId);
+        if (subscriberId == promoterId) {
+            throw new ConflictException("Unable to subscribe to yourself");
+        }
         User promoter = userRepository.require(promoterId);
+
         if (subscriptionRepository.findFirstBySubscriberIdAndPromoterId(subscriberId, promoterId).isPresent()) {
             return false;
         }

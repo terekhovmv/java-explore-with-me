@@ -14,6 +14,7 @@ import ru.practicum.ewm.event.model.EventFilter;
 import ru.practicum.ewm.event.model.EventSort;
 import ru.practicum.ewm.event.model.EventState;
 import ru.practicum.ewm.event.repository.EventRepository;
+import ru.practicum.ewm.exception.ConflictException;
 import ru.practicum.ewm.subscription.impl.SubscriberSubscriptionServiceImpl;
 import ru.practicum.ewm.subscription.model.Subscription;
 import ru.practicum.ewm.subscription.repository.SubscriptionRepository;
@@ -115,6 +116,18 @@ public class SubscriberSubscriptionServiceImplTest {
         ).thenReturn(Optional.of(new Subscription()));
 
         assertFalse(testee.add(subscriber.getId(), subscribedTo.getId()));
+        verify(subscriptionRepository, times(0)).save(any());
+    }
+
+    @Test
+    void addReflective() {
+        User subscriber = createUser();
+
+        when(
+                userRepository.require(subscriber.getId())
+        ).thenReturn(subscriber);
+
+        assertThrows(ConflictException.class, () -> testee.add(subscriber.getId(), subscriber.getId()));
         verify(subscriptionRepository, times(0)).save(any());
     }
 
