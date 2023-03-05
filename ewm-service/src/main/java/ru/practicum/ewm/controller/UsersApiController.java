@@ -14,7 +14,7 @@ import ru.practicum.ewm.event.model.EventSort;
 import ru.practicum.ewm.event.service.PromoterEventService;
 import ru.practicum.ewm.request.service.ParticipantRequestService;
 import ru.practicum.ewm.request.service.PromoterRequestService;
-import ru.practicum.ewm.subscription.SubscriberSubscriptionService;
+import ru.practicum.ewm.subscription.service.SubscriberSubscriptionService;
 
 import java.util.List;
 

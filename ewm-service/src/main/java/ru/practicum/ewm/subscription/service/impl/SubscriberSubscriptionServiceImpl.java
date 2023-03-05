@@ -1,4 +1,4 @@
-package ru.practicum.ewm.subscription.impl;
+package ru.practicum.ewm.subscription.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,9 +14,9 @@ import ru.practicum.ewm.event.model.EventState;
 import ru.practicum.ewm.event.repository.EventRepository;
 import ru.practicum.ewm.exception.ConflictException;
 import ru.practicum.ewm.pagination.RandomAccessPageRequest;
-import ru.practicum.ewm.subscription.SubscriberSubscriptionService;
 import ru.practicum.ewm.subscription.model.Subscription;
 import ru.practicum.ewm.subscription.repository.SubscriptionRepository;
+import ru.practicum.ewm.subscription.service.SubscriberSubscriptionService;
 import ru.practicum.ewm.user.mapping.UserMapper;
 import ru.practicum.ewm.user.model.User;
 import ru.practicum.ewm.user.repository.UserRepository;

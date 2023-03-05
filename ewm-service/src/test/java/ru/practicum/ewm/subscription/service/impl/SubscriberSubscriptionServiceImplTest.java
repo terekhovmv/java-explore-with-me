@@ -15,7 +15,6 @@ import ru.practicum.ewm.event.model.EventSort;
 import ru.practicum.ewm.event.model.EventState;
 import ru.practicum.ewm.event.repository.EventRepository;
 import ru.practicum.ewm.exception.ConflictException;
-import ru.practicum.ewm.subscription.impl.SubscriberSubscriptionServiceImpl;
 import ru.practicum.ewm.subscription.model.Subscription;
 import ru.practicum.ewm.subscription.repository.SubscriptionRepository;
 import ru.practicum.ewm.user.mapping.UserMapper;

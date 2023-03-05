@@ -1,4 +1,4 @@
-package ru.practicum.ewm.subscription;
+package ru.practicum.ewm.subscription.service;
 
 import ru.practicum.ewm.api.dto.EventShortDto;
 import ru.practicum.ewm.api.dto.UserShortDto;
