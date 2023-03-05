@@ -2287,6 +2287,107 @@
           }
         }
       }
+    },
+    "/subscriptions/{promoterId}/info": {
+      "get": {
+        "tags": [
+          "Public: Subscriptions"
+        ],
+        "summary": "Gets the subscription info about the promoter specified",
+        "operationId": "getSubscriptionInfo",
+        "parameters": [
+          {
+            "description": "subscribed promoter id",
+            "in": "path",
+            "name": "promoterId",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The subscription info is calculated and provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionInfoDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unable to find the promoter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/subscriptions/top": {
+      "get": {
+        "tags": [
+          "Public: Subscriptions"
+        ],
+        "summary": "Gets the infos of top subscriptions",
+        "operationId": "getTopSubscriptionInfos",
+        "parameters": [
+          {
+            "description": "the number of infos to skip",
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "description": "the max number of infos to provide",
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The subscription infos are calculated and provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SubscriptionInfoDto"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request is malformed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -3123,6 +3224,20 @@
           }
         },
         "description": "Пользователь (краткая информация)"
+      },
+      "SubscriptionInfoDto": {
+        "type": "object",
+        "properties": {
+          "subscribers": {
+            "type": "integer",
+            "description": "The number of subscribers",
+            "format": "int64",
+            "example": 5
+          },
+          "promoter": {
+            "$ref": "#/components/schemas/UserShortDto"
+          }
+        }
       }
     }
   }
