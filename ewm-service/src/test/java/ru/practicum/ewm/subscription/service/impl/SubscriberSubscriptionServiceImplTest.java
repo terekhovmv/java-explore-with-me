@@ -271,7 +271,7 @@ public class SubscriberSubscriptionServiceImplTest {
     }
 
     private Category createCategory() {
-        long idx = lastCategoryIdx;
+        long idx = lastCategoryIdx++;
         return new Category(idx, "name-" + idx);
     }
 
