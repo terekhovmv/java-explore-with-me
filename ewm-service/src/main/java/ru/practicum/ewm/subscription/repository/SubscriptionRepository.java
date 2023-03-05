@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import ru.practicum.ewm.exception.NotFoundException;
 import ru.practicum.ewm.subscription.model.Subscription;
+import ru.practicum.ewm.subscription.model.SubscriptionInfo;
 import ru.practicum.ewm.user.model.User;
 
 import java.util.List;
@@ -37,4 +38,13 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
                     "WHERE s.subscriber.id = :subscriberId"
     )
     List<Long> getSubscribedIds(@Param("subscriberId") long subscriberId);
+
+    @Query("SELECT COUNT(s) FROM Subscription s WHERE s.promoter.id = :promoterId")
+    long countSubscribers(@Param("promoterId") long promoterId);
+
+    @Query(
+            "SELECT NEW ru.practicum.ewm.subscription.model.SubscriptionInfo(s.promoter, COUNT(s.id)) " +
+                    "FROM Subscription s GROUP BY s.promoter.id ORDER BY COUNT(s.id) DESC"
+    )
+    Page<SubscriptionInfo> getTopInfos(Pageable pageable);
 }

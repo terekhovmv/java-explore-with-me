@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import ru.practicum.ewm.exception.NotFoundException;
 import ru.practicum.ewm.pagination.RandomAccessPageRequest;
 import ru.practicum.ewm.subscription.model.Subscription;
+import ru.practicum.ewm.subscription.model.SubscriptionInfo;
 import ru.practicum.ewm.user.model.User;
 import ru.practicum.ewm.user.repository.UserRepository;
 
@@ -147,6 +148,69 @@ public class SubscriptionRepositoryTest {
         }
 
         assertTrue(testee.getSubscribedIds(subscriber.getId()).isEmpty());
+    }
+
+    @Test
+    void countSubscribers() {
+        final long expected = 5;
+        User promoter = addUser();
+        for (int i = 0; i < expected; i++) {
+            addSubscription(addUser(), promoter);
+        }
+
+        final long otherPromoterSubscribers = 3;
+        User otherPromoter = addUser();
+        for (int i = 0; i < otherPromoterSubscribers; i++) {
+            addSubscription(addUser(), otherPromoter);
+        }
+
+        assertEquals(
+                expected,
+                testee.countSubscribers(promoter.getId())
+        );
+    }
+
+    @Test
+    void countAbsentSubscribers() {
+        User promoter = addUser();
+
+        assertEquals(
+                0,
+                testee.countSubscribers(promoter.getId())
+        );
+    }
+
+    @Test
+    void getTopSubscriptionInfos() {
+        final int windowSize = 4;
+        final int totalSize = 10;
+
+        List<SubscriptionInfo> allExpected = new ArrayList<>();
+        for (int subscribersCount = 0; subscribersCount < totalSize; subscribersCount++) {
+            User promoter = addUser();
+            for (int i = 0; i < subscribersCount; i++) {
+                addSubscription(addUser(), promoter);
+            }
+            allExpected.add(
+                    0 /*more subscribers in the beginning*/,
+                    new SubscriptionInfo(promoter, subscribersCount)
+            );
+        }
+
+        BiConsumer<Integer, Integer> tester = (from, expectedSize) -> {
+            List<SubscriptionInfo> result = testee.getTopInfos(
+                    RandomAccessPageRequest.of(from, windowSize, Sort.unsorted())
+            ).getContent();
+
+            assertIterableEquals(
+                    allExpected.subList(from, from + expectedSize),
+                    result
+            );
+        };
+
+        tester.accept(0, windowSize);
+        tester.accept(totalSize / 2, windowSize);
+        tester.accept((totalSize - 1) - windowSize / 2, windowSize / 2);
     }
 
     private User addUser() {
