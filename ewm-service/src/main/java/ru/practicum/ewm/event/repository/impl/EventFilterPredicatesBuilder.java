@@ -23,13 +23,13 @@ public class EventFilterPredicatesBuilder {
     public List<Predicate> build(EventFilter filter) {
         PredicatesList result = new PredicatesList();
 
-        result.add(this::forText, filter.getText());
-        result.add(this::forInitiators, filter.getInitiators());
-        result.add(this::forStates, filter.getStates());
-        result.add(this::forCategories, filter.getCategories());
+        result.buildAndAdd(this::forText, filter.getText());
+        result.buildAndAdd(this::forInitiators, filter.getInitiators());
+        result.buildAndAdd(this::forStates, filter.getStates());
+        result.buildAndAdd(this::forCategories, filter.getCategories());
         result.add(forStart(filter.getStart(), filter.getEnd()));
-        result.add(this::forEnd, filter.getEnd());
-        result.add(this::forPaid, filter.getPaid());
+        result.buildAndAdd(this::forEnd, filter.getEnd());
+        result.buildAndAdd(this::forPaid, filter.getPaid());
         result.add(forOnlyAvailable(filter.isOnlyAvailable()));
 
         return result;
@@ -91,12 +91,12 @@ public class EventFilterPredicatesBuilder {
     }
 
     private static class PredicatesList extends ArrayList<Predicate> {
-        public <V> boolean add(Function<V, Predicate> builder, V value) {
+        public <V> void buildAndAdd(Function<V, Predicate> builder, V value) {
             if (value == null) {
-                return false;
+                return;
             }
 
-            return add(builder.apply(value));
+            add(builder.apply(value));
         }
 
         @Override

@@ -1974,6 +1974,420 @@
           "Private: Запросы на участие"
         ]
       }
+    },
+    "/users/{userId}/subscriptions/{promoterId}": {
+      "post": {
+        "tags": [
+          "Private: Subscriptions"
+        ],
+        "summary": "Subscribes the user to promoter",
+        "operationId": "subscriberAddSubscription",
+        "parameters": [
+          {
+            "description": "subscriber id",
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "description": "id of promoter to be subscribed to",
+            "in": "path",
+            "name": "promoterId",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User is successfully subscribed to promoter"
+          },
+          "204": {
+            "description": "User is already subscribed to promoter"
+          },
+          "404": {
+            "description": "Unable to find the subscriber or promoter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Unable to subscribe to yourself",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Private: Subscriptions"
+        ],
+        "summary": "Unsubscribes the user from promoter",
+        "operationId": "subscriberRemoveSubscription",
+        "parameters": [
+          {
+            "description": "subscriber id",
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "description": "id of promoter to be unsubscribed from",
+            "in": "path",
+            "name": "promoterId",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "User is successfully unsubscribed from promoter"
+          },
+          "404": {
+            "description": "Unable to find the subscriber or the promoter or the subscription to delete",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/subscriptions": {
+      "get": {
+        "tags": [
+          "Private: Subscriptions"
+        ],
+        "summary": "Gets all subscribed promoters for the user",
+        "operationId": "subscriberGetSubscriptions",
+        "parameters": [
+          {
+            "description": "subscriber id",
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "description": "the number of subscriptions to skip",
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "description": "the max number of subscriptions to provide",
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The found subscriptions are provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserShortDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unable to find the subscriber",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request is malformed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/feed": {
+      "get": {
+        "tags": [
+          "Private: Subscriptions"
+        ],
+        "summary": "Gets event feed according to subscriptions",
+        "operationId": "subscriberGetFeed",
+        "parameters": [
+          {
+            "description": "subscriber id",
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "description": "the text to search in event annotation or description",
+            "in": "query",
+            "name": "text",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "ids of categories to search events from",
+            "in": "query",
+            "name": "categories",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          },
+          {
+            "description": "only paid/free events",
+            "in": "query",
+            "name": "paid",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "only events where it is still possible to participate",
+            "in": "query",
+            "name": "onlyAvailable",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "description": "Sorting: by event date or by views",
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "EVENT_DATE",
+                "VIEWS"
+              ]
+            }
+          },
+          {
+            "description": "the number of events to skip",
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "description": "the max number of events to provide",
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Events are provided according to criteria specified",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EventShortDto"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unable to find the subscriber",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request is malformed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/subscriptions/{promoterId}/info": {
+      "get": {
+        "tags": [
+          "Public: Subscriptions"
+        ],
+        "summary": "Gets the subscription info about the promoter specified",
+        "operationId": "getSubscriptionInfo",
+        "parameters": [
+          {
+            "description": "subscribed promoter id",
+            "in": "path",
+            "name": "promoterId",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The subscription info is calculated and provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubscriptionInfoDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unable to find the promoter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/subscriptions/top": {
+      "get": {
+        "tags": [
+          "Public: Subscriptions"
+        ],
+        "summary": "Gets the infos of top subscriptions",
+        "operationId": "getTopSubscriptionInfos",
+        "parameters": [
+          {
+            "description": "the number of infos to skip",
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "description": "the max number of infos to provide",
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The subscription infos are calculated and provided",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SubscriptionInfoDto"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request is malformed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2810,6 +3224,20 @@
           }
         },
         "description": "Пользователь (краткая информация)"
+      },
+      "SubscriptionInfoDto": {
+        "type": "object",
+        "properties": {
+          "subscribers": {
+            "type": "integer",
+            "description": "The number of subscribers",
+            "format": "int64",
+            "example": 5
+          },
+          "promoter": {
+            "$ref": "#/components/schemas/UserShortDto"
+          }
+        }
       }
     }
   }

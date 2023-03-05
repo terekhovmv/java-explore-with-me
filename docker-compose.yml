@@ -23,8 +23,8 @@ services:
       POSTGRES_PASSWORD: stats-db-pwd
       TZ: "Europe/Moscow"
 
-  ewm-server:
-    container_name: ewm-server
+  ewm-service:
+    container_name: ewm-service
     build: ./ewm-service
     ports:
       - "8080:8080"
