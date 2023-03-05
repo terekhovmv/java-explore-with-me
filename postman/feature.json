@@ -202,7 +202,6 @@
 											"\r",
 											"pm.test(\"Тело ответа должно содержать поле status\", function () {\r",
 											"    const body = pm.response.json();\r",
-											"    console.info(body);\r",
 											"    pm.expect(body).to.have.property('status');\r",
 											"});\r",
 											""
@@ -282,7 +281,6 @@
 											"\r",
 											"pm.test(\"Тело ответа должно содержать поле status\", function () {\r",
 											"    const body = pm.response.json();\r",
-											"    console.info(body);\r",
 											"    pm.expect(body).to.have.property('status');\r",
 											"});\r",
 											""
@@ -361,7 +359,6 @@
 											"\r",
 											"pm.test(\"Тело ответа должно содержать поле status\", function () {\r",
 											"    const body = pm.response.json();\r",
-											"    console.info(body);\r",
 											"    pm.expect(body).to.have.property('status');\r",
 											"});\r",
 											""
@@ -516,7 +513,6 @@
 											"\r",
 											"pm.test(\"Тело ответа должно содержать поле status\", function () {\r",
 											"    const body = pm.response.json();\r",
-											"    console.info(body);\r",
 											"    pm.expect(body).to.have.property('status');\r",
 											"});\r",
 											""
@@ -596,7 +592,6 @@
 											"\r",
 											"pm.test(\"Тело ответа должно содержать поле status\", function () {\r",
 											"    const body = pm.response.json();\r",
-											"    console.info(body);\r",
 											"    pm.expect(body).to.have.property('status');\r",
 											"});\r",
 											""
@@ -677,7 +672,6 @@
 											"\r",
 											"pm.test(\"Тело ответа должно содержать поле status\", function () {\r",
 											"    const body = pm.response.json();\r",
-											"    console.info(body);\r",
 											"    pm.expect(body).to.have.property('status');\r",
 											"});\r",
 											""
@@ -977,7 +971,6 @@
 											"\r",
 											"pm.test(\"Тело ответа должно содержать поле status\", function () {\r",
 											"    const body = pm.response.json();\r",
-											"    console.info(body);\r",
 											"    pm.expect(body).to.have.property('status');\r",
 											"});\r",
 											""
@@ -1050,7 +1043,6 @@
 											"\r",
 											"pm.test(\"Тело ответа должно содержать поле status\", function () {\r",
 											"    const body = pm.response.json();\r",
-											"    console.info(body);\r",
 											"    pm.expect(body).to.have.property('status');\r",
 											"});\r",
 											""
@@ -1133,7 +1125,6 @@
 											"\r",
 											"pm.test(\"Тело ответа должно содержать поле status\", function () {\r",
 											"    const body = pm.response.json();\r",
-											"    console.info(body);\r",
 											"    pm.expect(body).to.have.property('status');\r",
 											"});\r",
 											""
@@ -1350,7 +1341,6 @@
 									"\r",
 									"pm.test(\"Тело ответа должно содержать поле status\", function () {\r",
 									"    const body = pm.response.json();\r",
-									"    console.info(body);\r",
 									"    pm.expect(body).to.have.property('status');\r",
 									"});\r",
 									""
@@ -1423,7 +1413,6 @@
 									"\r",
 									"pm.test(\"Тело ответа должно содержать поле status\", function () {\r",
 									"    const body = pm.response.json();\r",
-									"    console.info(body);\r",
 									"    pm.expect(body).to.have.property('status');\r",
 									"});\r",
 									""
@@ -1502,7 +1491,6 @@
 									"\r",
 									"pm.test(\"Тело ответа должно содержать поле status\", function () {\r",
 									"    const body = pm.response.json();\r",
-									"    console.info(body);\r",
 									"    pm.expect(body).to.have.property('status');\r",
 									"});\r",
 									""
@@ -1585,7 +1573,6 @@
 									"\r",
 									"pm.test(\"Тело ответа должно содержать поле status\", function () {\r",
 									"    const body = pm.response.json();\r",
-									"    console.info(body);\r",
 									"    pm.expect(body).to.have.property('status');\r",
 									"});\r",
 									""
@@ -1761,7 +1748,6 @@
 											"\r",
 											"pm.test(\"Тело ответа должно содержать поле status\", function () {\r",
 											"    const body = pm.response.json();\r",
-											"    console.info(body);\r",
 											"    pm.expect(body).to.have.property('status');\r",
 											"});\r",
 											""
@@ -1921,7 +1907,6 @@
 											"\r",
 											"pm.test(\"Тело ответа должно содержать поле status\", function () {\r",
 											"    const body = pm.response.json();\r",
-											"    console.info(body);\r",
 											"    pm.expect(body).to.have.property('status');\r",
 											"});\r",
 											""
@@ -1980,7 +1965,6 @@
 											"\r",
 											"pm.test(\"Тело ответа должно содержать поле status\", function () {\r",
 											"    const body = pm.response.json();\r",
-											"    console.info(body);\r",
 											"    pm.expect(body).to.have.property('status');\r",
 											"});\r",
 											""
