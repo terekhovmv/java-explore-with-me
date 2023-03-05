@@ -1,5 +1,6 @@
 package ru.practicum.ewm.subscription.repository;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -24,10 +25,17 @@ public class SubscriptionRepositoryTest {
     @Autowired
     private SubscriptionRepository testee;
 
+    private long lastUserIdx = 0;
+
+    @BeforeEach
+    void beforeEach() {
+        lastUserIdx = 0;
+    }
+
     @Test
     void require() {
-        User ann = addUser(0);
-        User bob = addUser(1);
+        User ann = addUser();
+        User bob = addUser();
         addSubscription(ann, bob);
 
         Subscription result = testee.require(ann.getId(), bob.getId());
@@ -37,9 +45,9 @@ public class SubscriptionRepositoryTest {
 
     @Test
     void requireThrowsException() {
-        User ann = addUser(0);
-        User bob = addUser(1);
-        User cam = addUser(2);
+        User ann = addUser();
+        User bob = addUser();
+        User cam = addUser();
         addSubscription(bob, cam);
 
         assertThrows(NotFoundException.class, () -> testee.require(bob.getId(), ann.getId()));
@@ -48,8 +56,8 @@ public class SubscriptionRepositoryTest {
 
     @Test
     void findFirstBySubscriberIdAndPromoterId() {
-        User ann = addUser(0);
-        User bob = addUser(1);
+        User ann = addUser();
+        User bob = addUser();
         addSubscription(ann, bob);
 
         Subscription result = testee.require(ann.getId(), bob.getId());
@@ -63,14 +71,14 @@ public class SubscriptionRepositoryTest {
         final int windowSize = 10;
         final int totalSize = windowSize * 5;
 
-        User subscriber = addUser(totalSize);
+        User subscriber = addUser();
         List<User> subscribed = new ArrayList<>();
         for (int i = 0; i < totalSize; i++) {
-            User user = addUser(i);
+            User user = addUser();
             subscribed.add(user);
             addSubscription(subscriber, user);
         }
-        addUser(totalSize + 1);
+        addUser();
 
 
         BiConsumer<Integer, Integer> tester = (from, expectedSize) -> {
@@ -94,9 +102,9 @@ public class SubscriptionRepositoryTest {
     void getSubscribedEmptyList() {
         final int totalSize = 10;
 
-        User subscriber = addUser(totalSize);
+        User subscriber = addUser();
         for (int i = 0; i < totalSize; i++) {
-            addUser(i);
+            addUser();
         }
 
         List<User> result = testee.getSubscribed(
@@ -111,14 +119,14 @@ public class SubscriptionRepositoryTest {
     void getSubscribedIds() {
         final int totalSize = 10;
 
-        User subscriber = addUser(totalSize);
+        User subscriber = addUser();
         List<User> subscribed = new ArrayList<>();
         for (int i = 0; i < totalSize; i++) {
-            User user = addUser(i);
+            User user = addUser();
             subscribed.add(user);
             addSubscription(subscriber, user);
         }
-        addUser(totalSize + 1);
+        addUser();
 
 
         List<Long> actual = testee.getSubscribedIds(
@@ -133,15 +141,17 @@ public class SubscriptionRepositoryTest {
     void getSubscribedIdsEmptyList() {
         final int totalSize = 10;
 
-        User subscriber = addUser(totalSize);
+        User subscriber = addUser();
         for (int i = 0; i < totalSize; i++) {
-            addUser(i);
+            addUser();
         }
 
         assertTrue(testee.getSubscribedIds(subscriber.getId()).isEmpty());
     }
 
-    private User addUser(long idx) {
+    private User addUser() {
+        long idx = lastUserIdx++;
+
         String name = "user-name-" + (1000 + idx);
         User archetype = new User(
                 null,
