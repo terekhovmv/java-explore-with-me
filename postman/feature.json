@@ -1628,6 +1628,396 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Subscription information",
+			"item": [
+				{
+					"name": "By promoter",
+					"item": [
+						{
+							"name": "Get info",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"((func) => {\r",
+											"    const interval = setInterval(() => {}, 1000);\r",
+											"    setTimeout(async () => { try {  await func();  } catch (e) { console.error(e); } finally {  clearInterval(interval); } }, 100);\r",
+											"})(async () => {\r",
+											"\r",
+											"    const api = new API(pm);\r",
+											"    const rnd = new RandomUtils();\r",
+											"\r",
+											"    try {\r",
+											"\r",
+											"        const u = () => { return api.addUser(rnd.getUser()); };\r",
+											"\r",
+											"        const promoter = await u();\r",
+											"        await api.addSubscription((await u()).id, promoter.id);\r",
+											"        await api.addSubscription((await u()).id, promoter.id);\r",
+											"    \r",
+											"        pm.collectionVariables.set(\"promoterId\", promoter.id);\r",
+											"        pm.collectionVariables.set(\"expected\", {\r",
+											"            subscribers: 2,\r",
+											"            promoter\r",
+											"        });\r",
+											"\r",
+											"    } catch(err) {\r",
+											"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+											"    }\r",
+											"\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ожидаются статус 200 (Ok) и данные в формате JSON\", function () {\r",
+											"    pm.response.to.be.ok;\r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const actual = pm.response.json();\r",
+											"const expected = pm.collectionVariables.get(\"expected\");\r",
+											"\r",
+											"pm.test(\"Информация о подписках должна совпадать с ожидаемой \" + JSON.stringify(expected), function () {\r",
+											"    pm.expect(actual.subscribers).to.be.equal(expected.subscribers);\r",
+											"    pm.expect(actual.promoter.id).to.be.equal(expected.promoter.id);\r",
+											"    pm.expect(actual.promoter.name).to.be.equal(expected.promoter.name);\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/subscriptions/:promoterId/info",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"subscriptions",
+										":promoterId",
+										"info"
+									],
+									"variable": [
+										{
+											"key": "promoterId",
+											"value": "{{promoterId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Negative: Promoter is unknown user",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"((func) => {\r",
+											"    const interval = setInterval(() => {}, 1000);\r",
+											"    setTimeout(async () => { try {  await func();  } catch (e) { console.error(e); } finally {  clearInterval(interval); } }, 100);\r",
+											"})(async () => {\r",
+											"\r",
+											"    const api = new API(pm);\r",
+											"    const rnd = new RandomUtils();\r",
+											"\r",
+											"    try {\r",
+											"\r",
+											"        const someOtherUser = await api.addUser(rnd.getUser());\r",
+											"        pm.collectionVariables.set(\"promoterId\", someOtherUser.id + 1000 /*unknown user*/);\r",
+											"\r",
+											"    } catch(err) {\r",
+											"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+											"    }\r",
+											"\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ожидаются статус 404 (Not Found) и данные в формате JSON\", function () {\r",
+											"    pm.response.to.be.notFound;\r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Тело ответа должно содержать поле status\", function () {\r",
+											"    const body = pm.response.json();\r",
+											"    console.info(body);\r",
+											"    pm.expect(body).to.have.property('status');\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/subscriptions/:promoterId/info",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"subscriptions",
+										":promoterId",
+										"info"
+									],
+									"variable": [
+										{
+											"key": "promoterId",
+											"value": "{{promoterId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Top subscriptions",
+					"item": [
+						{
+							"name": "Get top subscriptions",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"((func) => {\r",
+											"    const interval = setInterval(() => {}, 1000);\r",
+											"    setTimeout(async () => { try {  await func();  } catch (e) { console.error(e); } finally {  clearInterval(interval); } }, 100);\r",
+											"})(async () => {\r",
+											"\r",
+											"    const api = new API(pm);\r",
+											"    const rnd = new RandomUtils();\r",
+											"\r",
+											"    try {\r",
+											"\r",
+											"        const from = 0;\r",
+											"        const size = 2;\r",
+											"\r",
+											"        const u = () => { return api.addUser(rnd.getUser()); };\r",
+											"\r",
+											"        const promoter1 = await u();\r",
+											"        await api.addSubscription((await u()).id, promoter1.id);\r",
+											"\r",
+											"        const promoter3 = await u();\r",
+											"        await api.addSubscription((await u()).id, promoter3.id);\r",
+											"        await api.addSubscription((await u()).id, promoter3.id);\r",
+											"        await api.addSubscription((await u()).id, promoter3.id);\r",
+											"\r",
+											"        pm.collectionVariables.set(\"from\", from);\r",
+											"        pm.collectionVariables.set(\"size\", size);\r",
+											"\r",
+											"    } catch(err) {\r",
+											"        console.error(\"Ошибка при подготовке тестовых данных.\", err);\r",
+											"    }\r",
+											"\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ожидаются статус 200 (Ok) и данные в формате JSON\", function () {\r",
+											"    pm.response.to.be.ok;\r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"const actual = pm.response.json();\r",
+											"const expectedSize = Number(pm.collectionVariables.get(\"size\"));\r",
+											"\r",
+											"pm.test(\"Количество элементов должно составлять \" + expectedSize, function () {\r",
+											"    pm.expect(actual.length).to.be.equal(expectedSize);\r",
+											"});\r",
+											"\r",
+											"for (let i = 0; i < actual.length; i++) {\r",
+											"    const actualInfo = actual[i];\r",
+											"    pm.test(\"Элемент #\" + i + \" должно содержать поля subscribers и promoter\", function () {\r",
+											"        pm.expect(actualInfo).to.have.property('subscribers');\r",
+											"        pm.expect(actualInfo).to.have.property('promoter');\r",
+											"        pm.expect(actualInfo.promoter).to.have.property('id');\r",
+											"        pm.expect(actualInfo.promoter).to.have.property('name');\r",
+											"    });\r",
+											"}"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/subscriptions/top?from={{from}}&size={{size}}",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"subscriptions",
+										"top"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "{{from}}"
+										},
+										{
+											"key": "size",
+											"value": "{{size}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Negative: Negative from value",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ожидаются статус 400 (Bad Request) и данные в формате JSON\", function () {\r",
+											"    pm.response.to.be.badRequest;\r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Тело ответа должно содержать поле status\", function () {\r",
+											"    const body = pm.response.json();\r",
+											"    console.info(body);\r",
+											"    pm.expect(body).to.have.property('status');\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/subscriptions/top?from=-1&size=10",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"subscriptions",
+										"top"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "-1"
+										},
+										{
+											"key": "size",
+											"value": "10"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Negative: Non positive size value",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Ожидаются статус 400 (Bad Request) и данные в формате JSON\", function () {\r",
+											"    pm.response.to.be.badRequest;\r",
+											"    pm.response.to.be.withBody;\r",
+											"    pm.response.to.be.json;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Тело ответа должно содержать поле status\", function () {\r",
+											"    const body = pm.response.json();\r",
+											"    console.info(body);\r",
+											"    pm.expect(body).to.have.property('status');\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/subscriptions/top?from=0&size=0",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"subscriptions",
+										"top"
+									],
+									"query": [
+										{
+											"key": "from",
+											"value": "0"
+										},
+										{
+											"key": "size",
+											"value": "0"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
 		}
 	],
 	"event": [
