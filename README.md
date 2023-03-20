@@ -1,5 +1,16 @@
 # java-explore-with-me
 
+## UPD: Feature
+
+Branch: `feature_subscriptions`.
+
+Pull request: https://github.com/terekhovmv/java-explore-with-me/pull/4
+
+Swagger specs are embedded and available via `<server>/swagger-ui/index.html` ( e.g. http://localhost:8080/swagger-ui/index.html ).
+See sections:
+* Private: Subscriptions
+* Public: Subscriptions
+
 ## Components
 
 ### `ewm-service`
